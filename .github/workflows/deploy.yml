@@ -36,7 +36,13 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: client/package-lock.json
-      - run: npm ci
+      # `npm install` plutôt que `npm ci` : le package-lock.json est généré
+      # sous Windows et n'inclut pas tous les nœuds de dépendances optionnelles
+      # cross-platform (ex. @emnapi/core / @emnapi/runtime, requis par
+      # @img/sharp-wasm32). La validation stricte de `npm ci` échoue alors sur
+      # Linux ("Missing ... from lock file"). `npm install` réconcilie ces
+      # nœuds optionnels en respectant les versions verrouillées, puis installe.
+      - run: npm install --no-audit --no-fund
       - run: npm run build
       # Fallback SPA : GitHub Pages renvoie 404.html pour tout chemin
       # inconnu. En servant une copie d'index.html, React Router prend

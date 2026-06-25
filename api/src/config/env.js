@@ -38,6 +38,25 @@ export const DB_USER = process.env.DB_USER ?? 'root';
 export const DB_PASSWORD = process.env.DB_PASSWORD ?? '';
 export const DB_NAME = process.env.DB_NAME ?? 'csc_ostwald';
 
+// ─── TLS base de données ───────────────────────────────────
+// Les MySQL managés (Aiven, PlanetScale, RDS, ...) imposent TLS. Sans
+// `ssl`, mysql2 se connecte en clair et le serveur rejette la connexion
+// ("Connections using insecure transport are prohibited").
+//   DB_SSL=true    → active le chiffrement TLS.
+//   DB_SSL_CA=<PEM> → (optionnel) certificat CA pour vérifier le serveur ;
+//                     fourni, on exige un certificat valide. Absent, la
+//                     connexion reste chiffrée mais le certificat n'est pas
+//                     vérifié (rejectUnauthorized:false) — suffisant pour un
+//                     petit site, à durcir avec le CA si besoin.
+// Reste désactivé par défaut, donc le MySQL local en clair fonctionne tel quel.
+export const DB_SSL = (process.env.DB_SSL ?? 'false').toLowerCase() === 'true';
+const DB_SSL_CA = process.env.DB_SSL_CA || '';
+export const DB_SSL_OPTIONS = DB_SSL
+  ? DB_SSL_CA
+    ? { ca: DB_SSL_CA, rejectUnauthorized: true }
+    : { rejectUnauthorized: false }
+  : undefined;
+
 // ─── JWT ───────────────────────────────────────────────────
 // Échec immédiat en production si le secret est absent, vide, égal à la
 // valeur de repli de dev, ou trop court pour résister au brute-force —

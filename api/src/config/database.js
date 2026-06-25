@@ -8,7 +8,7 @@
 // ============================================================
 
 import mysql from 'mysql2/promise';
-import { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } from './env.js';
+import { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, DB_SSL_OPTIONS } from './env.js';
 
 export const pool = mysql.createPool({
   host: DB_HOST,
@@ -16,6 +16,8 @@ export const pool = mysql.createPool({
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
+  // TLS pour les hôtes managés (Aiven, etc.). undefined en local → clair.
+  ...(DB_SSL_OPTIONS ? { ssl: DB_SSL_OPTIONS } : {}),
   // Config du pool — calibrée pour un petit site de centre social (peu
   // d'utilisateurs simultanés).
   waitForConnections: true,

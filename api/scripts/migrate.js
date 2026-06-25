@@ -20,7 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import mysql from 'mysql2/promise';
-import { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } from '../src/config/env.js';
+import { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, DB_SSL_OPTIONS } from '../src/config/env.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const schemaPath = path.resolve(here, '..', 'database.sql');
@@ -61,10 +61,10 @@ const conn = await mysql.createConnection({
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
-  // Aiven et la plupart des fournisseurs managés exigent TLS ; mysql2 le
-  // négocie automatiquement quand le serveur l'annonce. Pas besoin de
-  // `ssl: {}` explicite — mais passer `?ssl-mode=REQUIRED` dans l'URL si
-  // le fournisseur refuse la négociation de type STARTTLS.
+  // TLS explicite pour Aiven & co. mysql2 NE négocie PAS TLS tout seul : sans
+  // l'option `ssl`, il se connecte en clair et l'hôte managé rejette. Piloté
+  // par DB_SSL / DB_SSL_CA (cf. src/config/env.js).
+  ...(DB_SSL_OPTIONS ? { ssl: DB_SSL_OPTIONS } : {}),
 });
 
 try {

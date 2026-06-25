@@ -47,6 +47,9 @@ services:
         sync: false
       - key: DB_NAME
         sync: false
+      # TLS requis par les MySQL managés (Aiven, etc.). Laisser à true en prod.
+      - key: DB_SSL
+        value: true
 
       # ── Auth ───────────────────────────────────────────────
       # Generate locally: `openssl rand -base64 64`

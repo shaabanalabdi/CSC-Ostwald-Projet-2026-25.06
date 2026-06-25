@@ -3,6 +3,13 @@ import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
+  // ── Base public path ───────────────────────────────────────
+  // Root (`/`) en dev, sur Vercel et en local. Sur GitHub Pages le
+  // site est servi sous un sous-dossier (`/<repo>/`), donc le workflow
+  // CI exporte `VITE_BASE_PATH=/CSC-Ostwald-Projet-2026-25.06/` avant
+  // `vite build`. Garde un seul build paramétrable au lieu de figer le
+  // sous-chemin (qui casserait les assets sur Vercel/dev).
+  base: process.env.VITE_BASE_PATH || '/',
   plugins: [react()],
   // ── Dev server ─────────────────────────────────────────────
   // Proxy `/api/*` to the backend so the frontend keeps its relative

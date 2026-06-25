@@ -230,7 +230,10 @@ export default function App() {
       <LazyMotion features={domAnimation}>
         <RtlProvider>
           <AccessibilityProvider>
-            <BrowserRouter>
+            {/* basename = base public path Vite (import.meta.env.BASE_URL).
+                `/` en dev/Vercel, `/<repo>/` sur GitHub Pages — garde les
+                liens internes corrects quel que soit l'hébergement. */}
+            <BrowserRouter basename={import.meta.env.BASE_URL}>
               <ScrollToTop />
               <ErrorBoundary>
                 <Suspense fallback={<PageLoader />}>

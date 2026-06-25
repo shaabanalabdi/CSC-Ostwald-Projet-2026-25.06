@@ -1,0 +1,309 @@
+@use 'variables' as *;
+
+// ============================================================
+// AdminProjetSocial — list + reorder + CRUD for the documents
+// shown on the public Projet Social page. Modeled after
+// AdminPartners (similar shape: card list, drag-and-drop, color
+// modifier per item) with a slightly different colour palette.
+// ============================================================
+
+.admin-projet-social {
+  min-height: 100vh;
+  background: $gray-50;
+  padding: $space-8 $space-6;
+
+  &__header {
+    max-width: 1100px;
+    margin: 0 auto $space-6 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $space-4;
+    flex-wrap: wrap;
+  }
+
+  &__back {
+    display: inline-block;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-decoration: none;
+    margin-bottom: $space-2;
+
+    &:hover {
+      color: $bleu;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-size: $text-3xl;
+    color: $bleu-dark;
+    display: flex;
+    align-items: baseline;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+
+  &__count {
+    font-size: $text-sm;
+    color: $gray-500;
+    font-weight: $font-normal;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &__cta {
+    padding: $space-2 $space-4;
+    background: $orange-dark;
+    color: $white;
+    border: 1px solid $orange-dark;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    font-weight: $font-semibold;
+    text-decoration: none;
+    transition:
+      filter $transition-base $ease-out,
+      transform $transition-base $ease-out;
+
+    &:hover {
+      filter: brightness(0.92);
+    }
+  }
+
+  &__btn {
+    padding: $space-2 $space-4;
+    background: transparent;
+    color: $bleu;
+    border: 1px solid $bleu;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    cursor: pointer;
+    transition: $transition-colors;
+
+    &:hover:not(:disabled) {
+      background: $bleu;
+      color: $white;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__state {
+    max-width: 1100px;
+    margin: 0 auto $space-4 auto;
+    padding: $space-4 $space-5;
+    background: $white;
+    border-radius: $radius-md;
+    color: $gray-700;
+    font-size: $text-sm;
+
+    &--error {
+      color: $error-dark;
+      background: rgba(239, 68, 68, 0.06);
+    }
+  }
+
+  &__list {
+    list-style: none;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+
+  &__card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: $space-4;
+    align-items: flex-start;
+    padding: $space-5;
+    background: $white;
+    border-radius: $radius-lg2;
+    border: 1px solid $gray-200;
+    border-left: 4px solid $bleu;
+    box-shadow: $elevation-1;
+
+    // Sortable handle is the first <button>; the dnd-kit wrapper inserts it.
+    // Everything else flows in the second grid column.
+    > *:not(button:first-child) {
+      grid-column: 2;
+    }
+
+    &--blue {
+      border-left-color: $bleu;
+    }
+
+    &--orange {
+      border-left-color: $orange-dark;
+    }
+
+    &--green {
+      border-left-color: $green-text;
+    }
+
+    &--draft {
+      opacity: 0.7;
+      border-style: dashed;
+    }
+  }
+
+  &__card-meta {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin-bottom: $space-2;
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: $radius-pill;
+    font-size: 0.72rem;
+    font-weight: $font-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $white;
+
+    &--blue {
+      background: $bleu;
+    }
+
+    &--orange {
+      background: $orange-dark;
+    }
+
+    &--green {
+      background: $green-text;
+    }
+  }
+
+  &__draft {
+    display: inline-block;
+    padding: 3px 10px;
+    background: $gray-200;
+    color: $gray-700;
+    border-radius: $radius-pill;
+    font-size: 0.72rem;
+    font-weight: $font-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__name {
+    margin: 0 0 $space-2;
+    font-size: $text-lg;
+    color: $bleu-dark;
+    font-weight: $font-bold;
+  }
+
+  &__desc {
+    margin: 0 0 $space-2;
+    font-size: $text-sm;
+    color: $gray-600;
+    line-height: $leading-relaxed;
+  }
+
+  &__file {
+    margin: 0 0 $space-3;
+    font-size: 0.78rem;
+    color: $gray-500;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    word-break: break-all;
+
+    a {
+      color: $bleu;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__card-actions {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+  }
+
+  &__action {
+    padding: 6px 14px;
+    border-radius: 18px;
+    font-size: 0.82rem;
+    font-weight: $font-semibold;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid;
+    transition: $transition-colors;
+
+    &--edit {
+      color: $bleu;
+      border-color: $bleu;
+      background: transparent;
+
+      &:hover {
+        background: $bleu;
+        color: $white;
+      }
+    }
+
+    &--delete {
+      color: $error-dark;
+      border-color: $error-dark;
+      background: transparent;
+
+      &:hover:not(:disabled) {
+        background: $error-dark;
+        color: $white;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__pagination {
+    max-width: 1100px;
+    margin: $space-6 auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-4;
+  }
+
+  &__page-btn {
+    padding: 6px 14px;
+    background: $white;
+    border: 1px solid $gray-200;
+    border-radius: $radius-md;
+    color: $bleu;
+    font-size: $text-sm;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      border-color: $bleu;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__page-label {
+    font-size: $text-sm;
+    color: $gray-700;
+  }
+}

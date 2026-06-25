@@ -1,0 +1,117 @@
+// ============================================================
+// _typography.scss — Hiérarchie typographique (h1-h6, p, .text-*)
+// + polices spécifiques (Cairo pour ar, Fredoka pour .csc-bubble)
+// ============================================================
+
+@use '../variables' as *;
+
+// ===========================
+// TYPOGRAPHY BASELINE — Phase B (UI/UX Pro Max)
+// h1-h6 obtiennent un sizing + leading + tracking cohérents.
+// Les composants peuvent surcharger ces valeurs si besoin.
+// ===========================
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: inherit;
+  color: $bleu-dark;
+  line-height: $leading-tight;
+  letter-spacing: $tracking-tight;
+  font-weight: $font-bold;
+  // text-wrap: balance — équilibre automatique des lignes (Chrome 114+, FF 121+)
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: $text-4xl;
+}
+h2 {
+  font-size: $text-3xl;
+}
+h3 {
+  font-size: $text-2xl;
+}
+h4 {
+  font-size: $text-xl;
+}
+h5 {
+  font-size: $text-lg;
+}
+h6 {
+  font-size: $text-base;
+}
+
+p {
+}
+
+// ===========================
+// UTILITY CLASSES — typographie
+// ===========================
+.text-display {
+  font-family: $font-display; // Fredoka — titre d'affichage rond (identité CSC)
+  font-size: clamp(2.5rem, 5vw, $text-5xl); // fluid 40px → 48px
+  font-weight: $font-bold; // Fredoka 700 — 800 n'est pas chargée
+  line-height: $leading-none;
+  letter-spacing: $tracking-tighter;
+  text-wrap: balance;
+}
+
+.text-lead {
+  font-size: $text-lg;
+  line-height: $leading-relaxed;
+  color: $gray-600;
+  font-weight: $font-normal;
+}
+
+.text-caption {
+  font-size: $text-xs;
+  line-height: $leading-snug;
+  color: $gray-500;
+  letter-spacing: $tracking-wide;
+}
+
+.text-overline {
+  font-size: $text-xs;
+  font-weight: $font-bold;
+  letter-spacing: $tracking-widest;
+  text-transform: uppercase;
+  color: $orange-text;
+}
+
+.text-muted {
+  color: $gray-500;
+}
+.text-balance {
+  text-wrap: balance;
+}
+.text-nowrap {
+  white-space: nowrap;
+}
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Police arabe : Cairo (RTL-compatible, designée pour l'arabe)
+// Appliquée automatiquement quand <html lang="ar"> (basculé dans App.tsx)
+:lang(ar),
+html[lang='ar'] body {
+  font-family:
+    'Cairo',
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+// Police décorative "Fredoka" pour les badges CSC (style Instagram)
+// Caractéristiques : lettres rondes mais nettes, optimisée pour UPPERCASE.
+// Utilisée UNIQUEMENT sur .csc-bubble (le body reste Outfit/Cairo).
+// Sniglet abandonné car illisible en UPPERCASE bold.
+.csc-bubble,
+.csc-bubble * {
+  font-family: 'Open Sans', system-ui, sans-serif;
+}

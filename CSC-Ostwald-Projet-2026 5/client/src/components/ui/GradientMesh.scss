@@ -1,0 +1,153 @@
+@use 'variables' as *;
+
+// ============================================================
+// GradientMesh — Fond gradient mesh animé
+// Trois « blobs » radial-gradient flous qui dérivent lentement.
+// Chaque variante (warm/cool/sunset/calm) définit la palette des 3 blobs.
+// ============================================================
+
+.gradient-mesh {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+
+  // Blob de base : grand cercle flou, animé en translate + scale
+  &__blob {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.6;
+    will-change: transform;
+
+    // Trois positions de départ pour répartir les blobs sur la zone
+    &--1 {
+      top: -10%;
+      inset-inline-start: -10%;
+      animation: meshDrift1 22s ease-in-out infinite;
+    }
+
+    &--2 {
+      top: 30%;
+      inset-inline-end: -15%;
+      animation: meshDrift2 28s ease-in-out infinite;
+    }
+
+    &--3 {
+      bottom: -20%;
+      inset-inline-start: 20%;
+      animation: meshDrift3 25s ease-in-out infinite;
+    }
+  }
+
+  // ───────────────────────────────────────────────────────
+  // VARIANTES — palette des 3 blobs par contexte
+  // ───────────────────────────────────────────────────────
+
+  // Warm : orange chaud (Hero, sections accueillantes)
+  &--warm {
+    .gradient-mesh__blob--1 {
+      background: rgba($orange, 0.45);
+    }
+    .gradient-mesh__blob--2 {
+      background: rgba($orange-light, 0.4);
+    }
+    .gradient-mesh__blob--3 {
+      background: rgba($orange-light, 0.3);
+    }
+  }
+
+  // Cool : bleu + vert (Bénévole, sections professionnelles)
+  &--cool {
+    .gradient-mesh__blob--1 {
+      background: rgba($bleu, 0.4);
+    }
+    .gradient-mesh__blob--2 {
+      background: rgba($green, 0.3);
+    }
+    .gradient-mesh__blob--3 {
+      background: rgba(#4f6ef7, 0.35);
+    }
+  }
+
+  // Sunset : orange + pink + bleu (sections festives, événements)
+  &--sunset {
+    .gradient-mesh__blob--1 {
+      background: rgba($orange, 0.45);
+    }
+    .gradient-mesh__blob--2 {
+      background: rgba($sector-jeunesse, 0.35);
+    }
+    .gradient-mesh__blob--3 {
+      background: rgba($bleu, 0.3);
+    }
+  }
+
+  // Calm : bleu pâle + vert doux (sections d'information)
+  &--calm {
+    .gradient-mesh__blob--1 {
+      background: rgba(#5b8def, 0.3);
+    }
+    .gradient-mesh__blob--2 {
+      background: rgba($green-light, 0.25);
+    }
+    .gradient-mesh__blob--3 {
+      background: rgba($bleu, 0.2);
+    }
+  }
+
+  // Reduced motion : on garde les blobs visibles mais on supprime l'animation.
+  // → conserve la richesse visuelle sans déclencher de mouvement.
+  @media (prefers-reduced-motion: reduce) {
+    .gradient-mesh__blob {
+      animation: none;
+    }
+  }
+}
+
+// ===========================
+// Keyframes : drift organique
+// Chaque blob a une trajectoire différente pour éviter la répétition.
+// translate + scale uniquement → GPU layer, pas de reflow.
+// ===========================
+@keyframes meshDrift1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, 30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-25px, 50px) scale(0.95);
+  }
+}
+
+@keyframes meshDrift2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-50px, 25px) scale(1.05);
+  }
+  66% {
+    transform: translate(30px, -35px) scale(0.92);
+  }
+}
+
+@keyframes meshDrift3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(35px, -45px) scale(0.95);
+  }
+  66% {
+    transform: translate(-40px, 20px) scale(1.08);
+  }
+}

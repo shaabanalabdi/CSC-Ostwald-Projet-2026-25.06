@@ -1,0 +1,36 @@
+@use 'variables' as *;
+
+.sortable-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: $text-muted;
+  cursor: grab;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+  touch-action: none; // recommended by dnd-kit for touch drag
+  transition: $transition-colors;
+
+  &:hover:not(:disabled) {
+    color: $bleu;
+    background: rgba(1, 50, 204, 0.08);
+  }
+
+  &:active:not(:disabled) {
+    cursor: grabbing;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $bleu;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+}

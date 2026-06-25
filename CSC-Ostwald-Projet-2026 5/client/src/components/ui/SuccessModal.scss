@@ -1,0 +1,301 @@
+@use 'variables' as *;
+@use 'sass:color';
+
+// ===========================
+// OVERLAY
+// ===========================
+.success-modal__overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  // L'animation overlay est désormais pilotée par framer-motion (modalBackdrop preset).
+
+  &--green {
+    background: rgba(0, 20, 10, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  &--orange {
+    background: rgba(8, 18, 60, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+// ===========================
+// MODAL BOX
+// ===========================
+.success-modal {
+  background: $white;
+  border-radius: 22px;
+  padding: clamp(28px, 6vw, 44px) clamp(24px, 6vw, 40px);
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+  // L'animation modal est désormais pilotée par framer-motion (modalContent preset, spring).
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    border-radius: 22px 22px 0 0;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
+    font-weight: 900;
+    margin: 16px 0 10px;
+    letter-spacing: -0.3px;
+  }
+
+  p {
+    font-size: 0.93rem;
+    line-height: 1.65;
+    color: $text-muted;
+    margin-bottom: 20px;
+  }
+
+  // ===========================
+  // VARIANTE VERTE (inscription famille / jeune)
+  // ===========================
+  &--green {
+    box-shadow:
+      0 24px 64px rgba(0, 80, 30, 0.22),
+      0 4px 16px rgba(0, 0, 0, 0.1);
+
+    &::before {
+      background: linear-gradient(
+        90deg,
+        $green,
+        $green-light,
+        color.adjust($green-light, $lightness: 15%)
+      );
+    }
+
+    h2 {
+      color: $green-text;
+    }
+    p strong {
+      color: $green-text;
+    }
+
+    .success-modal__details {
+      background: linear-gradient(135deg, $success-bg, $success-light);
+      border-color: $success-light;
+    }
+
+    .success-modal__row:not(:last-child) {
+      border-bottom-color: $success-light;
+    }
+    .success-modal__row-label {
+      color: $green-text;
+    }
+    .success-modal__row-value {
+      color: $green-text;
+    }
+  }
+
+  // ===========================
+  // VARIANTE ORANGE (inscription bénévole)
+  // ===========================
+  &--orange {
+    box-shadow: 0 32px 80px rgba(8, 18, 60, 0.28);
+
+    &::before {
+      background: linear-gradient(
+        90deg,
+        $orange,
+        $orange-light,
+        color.adjust($orange-light, $lightness: 12%)
+      );
+    }
+
+    h2 {
+      color: $bleu-dark;
+    }
+    p strong {
+      color: $orange-text;
+      font-weight: 700;
+    }
+
+    .success-modal__details {
+      background: $warning-bg;
+      border-color: $warning-light;
+    }
+
+    .success-modal__row:not(:last-child) {
+      border-bottom-color: $warning-light;
+    }
+    .success-modal__row-label {
+      color: $orange-text;
+    }
+    .success-modal__row-value {
+      color: $bleu-dark;
+    }
+  }
+}
+
+// ===========================
+// ICÔNE + CHECKMARK ANIMÉ
+// ===========================
+.success-modal__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 4px;
+  width: 72px;
+  height: 72px;
+}
+
+.success-modal__checkmark {
+  width: 72px;
+  height: 72px;
+
+  circle {
+    stroke-width: 2;
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    fill: none;
+    animation: sm-strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.2s forwards;
+  }
+
+  path {
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    fill: none;
+    animation: sm-strokeCheck 0.4s ease 0.75s forwards;
+  }
+
+  &--green circle,
+  &--green path {
+    stroke: $green-light;
+  }
+
+  &--orange circle,
+  &--orange path {
+    stroke: $orange;
+  }
+}
+
+// ===========================
+// BLOC DE DÉTAILS
+// ===========================
+.success-modal__details {
+  border: 1px solid;
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.success-modal__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.87rem;
+
+  &:not(:last-child) {
+    padding-bottom: 9px;
+    border-bottom: 1px solid;
+  }
+}
+
+.success-modal__row-label {
+  font-weight: 600;
+  text-align: left;
+}
+
+.success-modal__row-value {
+  font-weight: 700;
+  text-align: right;
+  word-break: break-all;
+  max-width: 55%;
+}
+
+// ===========================
+// BOUTON RETOUR
+// ===========================
+.success-modal__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+  font-weight: 800;
+  font-size: 0.92rem;
+  letter-spacing: 0.3px;
+  padding: 12px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &--green {
+    background: linear-gradient(135deg, $green, $green-light);
+    box-shadow: 0 4px 16px rgba($green, 0.35);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba($green, 0.45);
+    }
+  }
+
+  &--orange {
+    background: linear-gradient(135deg, $orange, $orange-light);
+    box-shadow: 0 4px 16px rgba($orange, 0.38);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba($orange, 0.48);
+    }
+  }
+}
+
+// ===========================
+// ANIMATIONS
+// ===========================
+@keyframes sm-overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sm-modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes sm-strokeCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes sm-strokeCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

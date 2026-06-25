@@ -1,0 +1,39 @@
+/* ============================================================
+ * critical.css — first-paint font declarations.
+ *
+ * Loaded BEFORE the bundled @fontsource imports (via index.html) and
+ * matched 1-to-1 with the `<link rel="preload">` tags right above it.
+ * Result: the latin subsets of Outfit + Fredoka are available before
+ * the first paint → no font swap = no CLS from font-induced reflow.
+ *
+ * `font-display: optional` rounds out the strategy: if the file does
+ * arrive late (slow network), the browser sticks with the system
+ * fallback for the whole page lifetime rather than swapping mid-view.
+ *
+ * Other weights / subsets (cyrillic, latin-ext, Cairo for Arabic) are
+ * still handled by the @fontsource CSS imported from main.tsx with
+ * `font-display: swap`. They affect minority chars / locales where
+ * the swap is acceptable.
+ * ============================================================ */
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-display: optional;
+  font-weight: 400;
+  src: url('/fonts/open-sans-latin-400-normal.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-display: optional;
+  font-weight: 600;
+  src: url('/fonts/open-sans-latin-600-normal.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

@@ -1,0 +1,156 @@
+@use 'variables' as *;
+@use 'sass:color';
+
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-4;
+  background: linear-gradient(
+    135deg,
+    color.adjust($orange, $lightness: 30%),
+    color.adjust($bleu, $lightness: 35%)
+  );
+
+  &__card {
+    width: 100%;
+    max-width: 420px;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-4;
+    padding: $space-8;
+  }
+
+  &__back {
+    display: inline-block;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-decoration: none;
+    margin-bottom: $space-4;
+    transition: color $transition-base $ease-out;
+
+    &:hover {
+      color: $bleu;
+    }
+  }
+
+  &__title {
+    font-size: $text-3xl;
+    color: $bleu-dark;
+    margin: 0 0 $space-1 0;
+  }
+
+  &__subtitle {
+    font-size: $text-sm;
+    color: $text-muted;
+    margin: 0 0 $space-6 0;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    label {
+      font-size: $text-sm;
+      font-weight: $font-medium;
+      color: $gray-700;
+    }
+
+    input {
+      padding: $space-3 $space-4;
+      border: 1px solid $gray-300;
+      border-radius: $radius-md;
+      font-size: $text-base;
+      transition: $transition-colors;
+      background: $white;
+      color: $bleu-dark;
+
+      &:focus {
+        outline: none;
+        border-color: $bleu;
+        box-shadow: $ring-bleu;
+      }
+
+      &[aria-invalid='true'] {
+        border-color: $error;
+
+        &:focus {
+          box-shadow: $ring-error;
+        }
+      }
+    }
+  }
+
+  &__error {
+    font-size: $text-sm;
+    color: $error-dark;
+  }
+
+  &__form-error {
+    padding: $space-3 $space-4;
+    background: $error-bg;
+    color: $error-dark;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    margin: 0;
+    border: 1px solid $error-light;
+  }
+
+  &__success {
+    padding: $space-3 $space-4;
+    background: rgba($green-text, 0.1);
+    color: $green-text;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    margin: 0 0 $space-2 0;
+    border: 1px solid rgba($green-text, 0.25);
+  }
+
+  &__forgot {
+    display: block;
+    text-align: center;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-decoration: none;
+    margin-top: $space-1;
+    transition: color $transition-base $ease-out;
+
+    &:hover {
+      color: $bleu;
+    }
+  }
+
+  &__submit {
+    padding: $space-3 $space-6;
+    background: $orange;
+    color: $white;
+    border: none;
+    border-radius: $radius-md;
+    font-size: $text-base;
+    font-weight: $font-semibold;
+    cursor: pointer;
+    transition: $transition-colors;
+
+    &:hover:not(:disabled) {
+      background: $orange-dark;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: $ring-orange;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}

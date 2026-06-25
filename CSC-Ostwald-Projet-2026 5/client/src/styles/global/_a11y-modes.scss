@@ -1,0 +1,277 @@
+// ============================================================
+// _a11y-modes.scss — Modes d'accessibilité globaux activables via classe
+//   .a11y-grayscale      → noir/blanc (filter: grayscale)
+//   .a11y-high-contrast  → fond noir/texte blanc + ajustements par composant
+//   .a11y-negative       → invert(1) (filter)
+//
+// Pilotés par accessibilityStore.tsx via attribute sur <body>.
+//
+// IMPORTANT : `filter` est appliqué sur .app-wrapper ET .navbar séparément,
+// JAMAIS sur <body>. Un élément avec `filter` devient containing block pour
+// ses descendants `position: fixed` — ce qui ferait dériver les éléments
+// flottants. Navbar et AccessibilityWidget sont rendus comme frères de
+// .app-wrapper (cf. Layout.tsx) pour préserver leur ancrage au viewport.
+// Le filter est appliqué à chaque frère individuellement pour cohérence visuelle.
+// ============================================================
+
+@use '../variables' as *;
+
+body.a11y-grayscale .app-wrapper,
+body.a11y-grayscale .navbar {
+  filter: grayscale(100%);
+}
+
+body.a11y-high-contrast,
+body.a11y-negative {
+  .navbar {
+    border-bottom: 2px solid $orange;
+  }
+
+  .footer {
+    border-top: 2px solid $orange;
+  }
+}
+
+body.a11y-high-contrast {
+  background: #000 !important;
+  color: #fff !important;
+
+  .app-wrapper,
+  main,
+  section,
+  header,
+  footer,
+  nav,
+  article,
+  aside {
+    background: #000 !important;
+  }
+
+  img {
+    background: transparent !important;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  span,
+  li,
+  td,
+  th,
+  label {
+    color: #fff !important;
+  }
+
+  .info__contact-block {
+    background: #000 !important;
+    border-color: #000 !important;
+    border-left-color: $orange !important;
+  }
+
+  .benevole__inner {
+    background: #000 !important;
+    border-color: #000 !important;
+    border-left-color: $orange !important;
+  }
+
+  .benevole-form__card {
+    background: #000 !important;
+    border-color: #000 !important;
+  }
+
+  .benevole-form__check-text {
+    color: $bleu-dark !important;
+  }
+
+  .benevole-form__check {
+    background: #fafbff !important;
+  }
+
+  // ===========================
+  // FORMULAIRES INSCRIPTION
+  // ===========================
+  .inscription,
+  .inscription__header,
+  .inscription__section,
+  .inscription__participant-card {
+    background: #000 !important;
+  }
+
+  .inscription__header {
+    border-top-color: $bleu !important;
+  }
+
+  .inscription__section {
+    border-left-color: $bleu !important;
+  }
+
+  .inscription__field input,
+  .inscription__field textarea {
+    background: #111 !important;
+    color: #fff !important;
+    border-color: $bleu !important;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.4) !important;
+    }
+  }
+
+  .inscription__participant-card {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .inscription__table th,
+  .inscription__table td {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .inscription__modal {
+    background: #000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .inscription__modal-details {
+    background: #111 !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  // ===========================
+  // PAGE CONTACT
+  // ===========================
+  .contact,
+  .contact__hero,
+  .contact__card,
+  .contact__card-header,
+  .contact__card-body,
+  .contact__info-block,
+  .contact__info-item,
+  .contact__info-row,
+  .contact__hours {
+    background: #000 !important;
+    color: #fff !important;
+  }
+
+  .contact__card {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: none !important;
+  }
+
+  .contact__card-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .contact__info-item {
+    border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .contact__info-category {
+    color: $orange !important;
+  }
+
+  .contact__info-link {
+    color: $orange !important;
+  }
+
+  .contact__hours td {
+    color: #fff !important;
+    border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .contact__hours-closed {
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  .contact__input,
+  .contact__select,
+  .contact__textarea {
+    background: #111 !important;
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.4) !important;
+    }
+
+    &:focus {
+      border-color: $orange !important;
+      box-shadow: 0 0 0 3px rgba($orange, 0.25) !important;
+    }
+  }
+
+  .contact__label {
+    color: #fff !important;
+  }
+
+  .contact__error {
+    color: #ff6b6b !important;
+  }
+
+  // ===========================
+  // PAGE FAMILLE
+  // ===========================
+  .famille__hero,
+  .famille__activites,
+  .famille__card,
+  .famille__card-body {
+    background: #000 !important;
+    color: #fff !important;
+  }
+
+  .famille__card {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: none !important;
+  }
+
+  .famille__card-badge {
+    background: #222 !important;
+    color: #fff !important;
+  }
+
+  .famille__card-tag {
+    background: #222 !important;
+    color: #fff !important;
+  }
+
+  .famille__card-categorie {
+    color: $orange !important;
+  }
+
+  .famille__card-titre {
+    color: #fff !important;
+  }
+
+  .famille__card-desc {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .famille__activites-title {
+    color: $orange !important;
+  }
+
+  .famille__activites-desc {
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+}
+
+body.a11y-negative {
+  background: #000;
+
+  // Filter sur .app-wrapper ET .navbar séparément (cf. note du a11y-grayscale).
+  // Pas sur <body> sinon Navbar et widget dériveraient avec le scroll.
+  .app-wrapper,
+  .navbar {
+    filter: invert(1);
+  }
+
+  // Re-inverser les médias pour qu'ils restent lisibles
+  .app-wrapper img,
+  .app-wrapper video,
+  .navbar img {
+    filter: invert(1);
+  }
+}

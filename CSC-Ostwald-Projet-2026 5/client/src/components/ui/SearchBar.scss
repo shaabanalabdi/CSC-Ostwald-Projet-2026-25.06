@@ -1,0 +1,162 @@
+@use 'variables' as *;
+
+.search {
+  position: relative;
+
+  // Bouton loupe — cohérent avec lang-btn et burger de la navbar.
+  // (Avant : fond rgba(white, 0.15) + color white → INVISIBLE sur navbar blanche.)
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    // Touch target 44×44 (WCAG 2.5.5 AAA) — aligné avec navbar buttons
+    width: 44px;
+    height: 44px;
+    background: rgba($orange, 0.1);
+    border: none;
+    color: $orange-text;
+    border-radius: $radius-md; // 10px (unifié avec lang/burger)
+    cursor: pointer;
+    transition: $transition-colors, $transition-transform;
+
+    &:hover,
+    &--active {
+      background: rgba($orange, 0.2);
+    }
+  }
+
+  // Panneau déroulant
+  &__panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 320px;
+    background: $white;
+    // Blob radius (style wireframe mai 2026) — coin top-right plus arrondi
+    // pour souligner l'ancrage du panneau sous le bouton loupe (top-right).
+    border-radius: 24px 8px 24px 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    animation: searchFadeIn 0.18s ease;
+    z-index: 300;
+  }
+
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  &__input-icon {
+    color: $gray-400;
+    flex-shrink: 0;
+  }
+
+  &__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 0.92rem;
+    color: $bleu-dark;
+    background: transparent;
+
+    &::placeholder {
+      color: $gray-400;
+    }
+  }
+
+  &__clear {
+    background: none;
+    border: none;
+    color: $gray-400;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    border-radius: $radius-xs;
+    transition: $transition;
+
+    &:hover {
+      color: $orange-text;
+    }
+  }
+
+  // Suggestions
+  &__suggestions {
+    list-style: none;
+    padding: 6px 0;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  &__suggestion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: $bleu-dark;
+    transition: background 0.12s ease;
+
+    &:hover,
+    &--active {
+      background: rgba($orange, 0.07);
+      color: $orange-text;
+    }
+  }
+
+  &__suggestion-icon {
+    color: $gray-300;
+    flex-shrink: 0;
+
+    .search__suggestion:hover &,
+    .search__suggestion--active & {
+      color: $orange-text;
+    }
+  }
+
+  &__highlight {
+    background: rgba($orange, 0.2);
+    color: $orange-text;
+    border-radius: 2px;
+    font-weight: 700;
+    padding: 0 1px;
+  }
+
+  &__empty {
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    color: $gray-500;
+    font-style: italic;
+  }
+}
+
+@keyframes searchFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Mobile : panel pleine largeur
+@media (max-width: 768px) {
+  .search {
+    &__panel {
+      position: fixed;
+      top: $navbar-height; // ancrage sous la navbar (72px)
+      left: 0;
+      right: 0;
+      width: 100%;
+      border-radius: 0;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+  }
+}

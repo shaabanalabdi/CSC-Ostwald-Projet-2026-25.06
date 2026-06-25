@@ -1,0 +1,163 @@
+@use 'variables' as *;
+
+.benevole {
+  &__inner {
+    display: flex;
+    gap: $space-10;
+    align-items: flex-start;
+    background: $white;
+    // Blob radius (style wireframe mai 2026) — forme organique pour le bloc CTA.
+    // border-inline-start (5px solid $orange) remplacé par box-shadow inset
+    // (RTL-safe via inset-inline-start ne marche pas — on garde la border mais
+    // elle ne sera visible qu'au coin bas-gauche où le radius est faible).
+    border-radius: 60px 16px 50px 16px;
+    padding: $space-10;
+    box-shadow: $elevation-3;
+    border-inline-start: 5px solid $orange; // RTL-safe
+    position: relative;
+    overflow: hidden; // pour contenir les pseudo-éléments décoratifs
+
+    // Cercle décoratif top-right (LTR) / top-left (RTL)
+    &::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      inset-inline-end: -60px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba($orange, 0.15), rgba($orange, 0.04));
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    // 2e cercle décoratif (bottom-left) — touche supplémentaire de profondeur
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      inset-inline-start: -80px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba($bleu, 0.05), transparent);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+  }
+
+  &__icon-wrapper {
+    flex-shrink: 0;
+    width: 88px;
+    height: 88px;
+    background: linear-gradient(135deg, $orange, $orange-light);
+    color: $white;
+    border-radius: $radius-xl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: $shadow-orange-lg;
+    position: relative;
+    z-index: 1;
+
+    // Subtle pulse on hover (transmet l'idée d'invitation à l'action)
+    transition: transform $transition-base $ease-spring;
+  }
+
+  &__inner:hover &__icon-wrapper {
+    transform: scale(1.05) rotate(-3deg);
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    position: relative;
+    z-index: 1;
+  }
+
+  // Titre = .csc-bubble (Instagram CSC). Pas de typo locale ici pour ne pas
+  // entrer en conflit avec les tokens de la bubble. Juste un alignement.
+  &__title {
+    align-self: flex-start;
+    margin: 0 0 $space-2 0;
+  }
+
+  &__text {
+    font-size: $text-sm;
+    color: $bleu-dark;
+    line-height: $leading-relaxed;
+    strong {
+      color: $orange-text;
+      font-weight: $font-bold;
+    }
+  }
+
+  &__highlight {
+    font-size: $text-sm;
+    font-weight: $font-semibold;
+    color: $orange-text;
+    font-style: italic;
+    padding: $space-3 $space-4;
+    background: linear-gradient(135deg, rgba($orange, 0.12), rgba($orange, 0.05));
+    border-radius: $radius-md;
+    border-inline-start: 3px solid $orange; // RTL-safe
+  }
+
+  &__btn {
+    align-self: flex-end;
+    margin-top: 8px;
+  }
+}
+
+// ===========================
+// RESPONSIVE
+// ===========================
+@media (max-width: 768px) {
+  .benevole__inner {
+    flex-direction: column;
+    padding: 28px 20px;
+
+    // cache le cercle décoratif pour éviter le débordement
+    &::before {
+      display: none;
+    }
+  }
+
+  .benevole__icon-wrapper {
+    margin: 0 auto;
+  }
+
+  .benevole__btn {
+    align-self: center;
+    border-radius: 5px !important;
+    transition: none !important;
+
+    &:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    &:active {
+      transform: none !important;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .benevole__inner {
+    padding: 20px 16px;
+  }
+
+  .benevole__title {
+    align-self: center;
+  }
+
+  .benevole__text {
+    font-size: 0.88rem;
+  }
+
+  .benevole__highlight {
+    font-size: 0.88rem;
+    padding: 10px 12px;
+  }
+}

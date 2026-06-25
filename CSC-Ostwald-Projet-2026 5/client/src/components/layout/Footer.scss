@@ -1,0 +1,751 @@
+@use 'variables' as *;
+
+.footer {
+  background: $bleu-dark;
+  color: rgba($white, 0.85);
+  font-size: 0.88rem;
+  position: relative;
+  // Décoration : 2 cercles flous orange/bleu pour réchauffer le fond sombre
+  // (style "blob ambient" cohérent avec les autres sections du site)
+  overflow: hidden;
+
+  // Pseudo-élément décoratif : 2 « blobs » lumineux en arrière-plan
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    inset-inline-end: -150px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba($orange, 0.18), transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    inset-inline-start: -100px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(#5b8def, 0.12), transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Border-top orange : ligne d'accent qui marque la séparation visuelle
+  // avec la section précédente, dans le ton de la charte.
+  border-top: 3px solid $orange;
+
+  &__top {
+    padding: 48px 0 40px;
+    position: relative;
+    z-index: 1; // au-dessus des blobs décoratifs
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1.1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  // Chaque colonne : rythme vertical cohérent + séparateur subtil
+  // entre colonnes sur desktop (border-inline-start sur col 2 & 3).
+  &__col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+
+    // Séparateurs verticaux entre les colonnes (desktop uniquement)
+    &:not(:first-child) {
+      padding-inline-start: 32px; // padding-left LTR / padding-right RTL
+      border-inline-start: 1px solid rgba($white, 0.08);
+    }
+  }
+
+  // Titre de colonne — petit point décoratif avant + underline animé
+  &__heading {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $orange;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    // Point décoratif avant le titre
+    &::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $orange;
+      box-shadow: 0 0 0 3px rgba($orange, 0.2);
+      flex-shrink: 0;
+    }
+
+    // Underline qui descend sous le titre
+    &::after {
+      content: '';
+      position: absolute;
+      inset-inline-start: 16px; // aligné avec le texte (après le point + gap)
+      bottom: -8px;
+      width: 32px;
+      height: 2px;
+      background: linear-gradient(90deg, $orange 0%, rgba($orange, 0) 100%);
+      border-radius: 2px;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  // Lien de nav : chevron qui apparaît au hover (sans décaler le texte)
+  &__nav-link {
+    color: rgba($white, 0.85);
+    transition: $transition;
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding-block: 4px;
+    position: relative;
+
+    // Chevron caché par défaut (largeur 0), apparaît au hover
+    &::before {
+      content: '›';
+      display: inline-block;
+      width: 0;
+      overflow: hidden;
+      color: $orange;
+      font-weight: 700;
+      transition:
+        width 0.25s ease,
+        margin 0.25s ease;
+      margin-inline-end: 0;
+    }
+
+    // RTL : flip horizontal pour pointer vers le texte (qui est à gauche)
+    [dir='rtl'] &::before {
+      transform: scaleX(-1);
+    }
+
+    &:hover {
+      color: $white;
+
+      &::before {
+        width: 12px;
+        margin-inline-end: 6px;
+      }
+    }
+
+    // Variante : sous-lien (enfants de "À propos")
+    // Plus petit, indenté, avec un bullet décoratif à gauche
+    &--sub {
+      font-size: 0.82rem;
+      color: rgba($white, 0.7);
+
+      // Bullet visible en permanence (pas seulement au hover) pour
+      // signaler la hiérarchie sub-menu
+      &::before {
+        content: '•';
+        width: auto;
+        margin-inline-end: 8px;
+        color: rgba($orange, 0.7);
+        transition: color 0.25s ease;
+      }
+
+      // Pas de flip nécessaire en RTL pour le bullet (point symétrique)
+      [dir='rtl'] &::before {
+        transform: none;
+      }
+
+      &:hover {
+        color: $white;
+
+        &::before {
+          color: $orange;
+          width: auto;
+          margin-inline-end: 8px;
+        }
+      }
+    }
+  }
+
+  // Bouton accordéon (parent avec children) — comportement de toggle
+  // Standalone (n'hérite PAS de .footer__nav-link) pour éviter le ::before
+  // chevron qui décale la première lettre par rapport aux autres liens.
+  &__nav-toggle {
+    // Reset complet du <button>
+    appearance: none;
+    background: none;
+    border: none;
+    margin: 0;
+    cursor: pointer;
+    // Box IDENTIQUE à un <a.footer__nav-link>
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    color: rgba($white, 0.85);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: 1.65;
+    text-align: start;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $white;
+    }
+
+    &--open {
+      color: $white;
+    }
+  }
+
+  // Chevron du toggle — petit, à droite du label, pivote 180° à l'ouverture
+  &__nav-chevron {
+    flex-shrink: 0;
+    color: $orange;
+    transition: transform 0.25s ease;
+    width: 14px; // taille explicite (=size prop sur FiChevronDown)
+    height: 14px;
+    // S'aligne verticalement au centre du label
+    align-self: center;
+
+    &--up {
+      transform: rotate(180deg);
+    }
+  }
+
+  // Sous-liste (children d'un nav-link) — apparition animée + indentation
+  &__subnav {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 4px;
+    padding-inline-start: 14px; // LTR : left | RTL : right (automatique)
+    border-inline-start: 1px solid rgba($white, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    // Apparition fluide quand l'utilisateur clique sur le toggle
+    animation: footerSubnavFadeIn 0.22s ease;
+    overflow: hidden;
+  }
+
+  &__newsletter-text {
+    color: rgba($white, 0.7);
+    margin-bottom: 14px;
+  }
+
+  // Form newsletter : conteneur traité comme « bulle » subtile pour signaler
+  // qu'il s'agit du CTA principal du footer (cohérence avec le design system blob).
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: $space-4;
+    background: rgba($white, 0.035);
+    border: 1px solid rgba($white, 0.08);
+    border-radius: 24px 8px 24px 8px; // blob radius cohérent avec les cartes
+    transition:
+      border-color 0.3s ease,
+      background 0.3s ease;
+
+    // Quand le formulaire reçoit le focus → léger highlight du conteneur
+    &:focus-within {
+      border-color: rgba($orange, 0.35);
+      background: rgba($white, 0.05);
+    }
+  }
+
+  // Champ email — icône envelope DANS le champ (left padding pour l'icône)
+  &__field {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__field-icon {
+    position: absolute;
+    inset-inline-start: 14px; // 14px depuis le bord "début" (LTR=left, RTL=right)
+    color: rgba($white, 0.55);
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: color 0.2s ease;
+  }
+
+  &__input {
+    width: 100%;
+    padding-block: 12px;
+    padding-inline-start: 42px; // laisse place à l'icône envelope (left LTR / right RTL)
+    padding-inline-end: 16px;
+    background: rgba($white, 0.08);
+    border: 1px solid rgba($white, 0.2);
+    border-radius: 25px;
+    color: $white;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease;
+    // Touch target ≥ 44px (WCAG 2.5.5 AAA) — 12 + 12 + line-height ≈ 46px
+    min-height: 44px;
+
+    &::placeholder {
+      color: rgba($white, 0.6); // 4.7:1 sur $bleu-dark → AA OK
+    }
+
+    &:hover {
+      background: rgba($white, 0.12);
+      border-color: rgba($white, 0.3);
+    }
+
+    &:focus {
+      background: rgba($white, 0.14);
+      border-color: $orange;
+    }
+  }
+
+  // Quand le champ a le focus OU contient du texte → icône passe en orange
+  // (`:has()` — supporté sur tous les navigateurs modernes depuis 2023)
+  &__field:has(.footer__input:focus) .footer__field-icon,
+  &__field:has(.footer__input:not(:placeholder-shown)) .footer__field-icon {
+    color: $orange;
+  }
+
+  // .footer__submit = uniquement positionnement (icône RTL flip).
+  // Le rendu visuel est piloté par .btn-bubble (Instagram CSC) — voir global.scss.
+  &__submit {
+    margin-top: $space-2;
+
+    // RTL : avion en papier pointe vers la gauche → on flippe l'icône
+    [dir='rtl'] & svg {
+      transform: scaleX(-1);
+    }
+  }
+
+  &__rgpd {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: rgba($white, 0.7);
+    cursor: pointer;
+
+    input[type='checkbox'] {
+      flex-shrink: 0;
+      margin-top: 2px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: $orange;
+    }
+
+    &-link {
+      color: $orange;
+      text-decoration: underline;
+
+      &:hover {
+        color: $orange-light;
+      }
+    }
+  }
+
+  &__subscribed-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 0;
+  }
+
+  &__subscribed {
+    color: $green-light;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  // Coche SVG animée (remplace l'emoji ✅) — dessin progressif
+  &__subscribed-check {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+
+    circle {
+      fill: rgba($green, 0.15);
+      stroke: $green-light;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      animation: footerCheckCircle 700ms $ease-out forwards;
+    }
+
+    path {
+      stroke: $green-light;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: footerCheckPath 400ms $ease-out 500ms forwards;
+    }
+  }
+}
+
+@keyframes footerCheckCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes footerCheckPath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.footer {
+  &__resubscribe {
+    background: transparent;
+    border: 1px solid rgba($white, 0.3);
+    color: rgba($white, 0.85);
+    font-family: inherit;
+    font-size: 0.82rem;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: $transition;
+
+    &:hover {
+      background: rgba($white, 0.1);
+      border-color: rgba($white, 0.5);
+      color: $white;
+    }
+  }
+
+  &__email-error {
+    color: #ffb74d;
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+
+  &__social-section {
+    margin-top: 24px;
+  }
+
+  &__social-title {
+    font-size: 0.85rem;
+    color: $orange;
+    margin-bottom: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__socials {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__social {
+    // Touch target ≥ 40px (compromis : AAA = 44px, mais grappe d'icônes
+    // → on garde 40px pour rester compact, le gap de 10px compense)
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $white;
+    font-size: 0.95rem;
+    transition:
+      transform 0.3s $ease-out,
+      box-shadow 0.3s $ease-out;
+    position: relative;
+
+    // Cluster Instagram CSC : chaque icône a un léger « tilt » organique
+    // (rappel des bubbles inclinées sur les posts Instagram du centre)
+    &:nth-child(1) {
+      transform: rotate(-4deg);
+    }
+    &:nth-child(2) {
+      transform: rotate(3deg);
+    }
+    &:nth-child(3) {
+      transform: rotate(-2deg);
+    }
+
+    &--fb {
+      background: #1877f2;
+    }
+    &--ig {
+      background: linear-gradient(
+        135deg,
+        #f09433 0%,
+        #e6683c 25%,
+        #dc2743 50%,
+        #cc2366 75%,
+        #bc1888 100%
+      );
+    }
+    &--snap {
+      background: #fffc00;
+      color: #000;
+    }
+
+    // Hover : se redresse + monte + glow brand
+    &:hover {
+      transform: rotate(0deg) translateY(-4px) scale(1.12);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $orange;
+      outline-offset: 3px;
+    }
+  }
+
+  &__contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  // Chaque ligne contact : icône dans un petit cercle + texte
+  &__contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    color: rgba($white, 0.9);
+    // Blob radius léger pour cohérence avec le design system
+    border-radius: 14px 6px 14px 6px;
+    transition: $transition;
+
+    svg {
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      padding: 8px;
+      // Blob radius sur l'icône (au lieu du cercle plat) — touche organique
+      border-radius: 12px 4px 12px 4px;
+      background: rgba($orange, 0.15);
+      color: $orange;
+      box-sizing: border-box;
+      transition: $transition;
+    }
+
+    // Variantes blob différentes par ligne pour effet « puzzle organique »
+    &:nth-child(2) {
+      border-radius: 6px 14px 6px 14px;
+      svg {
+        border-radius: 4px 12px 4px 12px;
+      }
+    }
+    &:nth-child(3) {
+      border-radius: 14px 6px 14px 6px;
+      svg {
+        border-radius: 12px 4px 12px 4px;
+      }
+    }
+
+    &:hover:not(&--address) {
+      color: $white;
+      background: rgba($white, 0.05);
+
+      svg {
+        background: $orange;
+        color: $white;
+        transform: scale(1.08) rotate(-3deg);
+      }
+    }
+
+    &--address {
+      cursor: default;
+      align-items: flex-start;
+
+      svg {
+        margin-top: 2px;
+      }
+    }
+  }
+
+  &__bottom {
+    // Séparateur dégradé : plus subtil et organique qu'une ligne plate
+    border-top: 1px solid transparent;
+    border-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba($white, 0.15) 20%,
+        rgba($orange, 0.3) 50%,
+        rgba($white, 0.15) 80%,
+        transparent 100%
+      )
+      1;
+    padding: 18px 0;
+    position: relative;
+    z-index: 1;
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    p {
+      font-size: 0.8rem;
+      color: rgba($white, 0.75);
+    }
+  }
+
+  &__credits {
+    width: 100%;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba($white, 0.5);
+    padding-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  &__legal-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__mentions {
+    font-size: 0.8rem;
+    color: rgba($white, 0.75); // ↑ 0.45 → 0.75 pour WCAG AA (≥ 4.5:1 sur fond bleu-dark)
+    transition: $transition;
+
+    &:hover {
+      color: $orange;
+    }
+  }
+}
+
+// ===========================
+// ANIMATIONS (en dehors de .footer car @keyframes est global)
+// ===========================
+@keyframes footerSubnavFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ===========================
+// FOCUS VISIBLE (clavier uniquement)
+// `:focus-visible` ne s'affiche qu'au focus clavier (Tab/Shift+Tab),
+// pas au clic souris. Permet l'accès clavier sans gêner les utilisateurs souris.
+// ===========================
+.footer {
+  &__nav-link:focus-visible,
+  &__input:focus-visible,
+  &__submit:focus-visible,
+  &__social:focus-visible,
+  &__contact-item:focus-visible,
+  &__mentions:focus-visible,
+  &__rgpd-link:focus-visible,
+  &__resubscribe:focus-visible {
+    outline: 2px solid $orange;
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  // Le champ input et le bouton ont leur propre border-radius pill (25px)
+  &__input:focus-visible,
+  &__submit:focus-visible,
+  &__resubscribe:focus-visible {
+    border-radius: 25px;
+  }
+}
+
+// ===========================
+// RESPONSIVE
+// ===========================
+@media (max-width: 768px) {
+  .footer {
+    &__top {
+      padding: 36px 0 28px;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    // En mobile, le grid est en 1 colonne → on supprime les séparateurs
+    // verticaux et on les remplace par un trait horizontal au-dessus de
+    // chaque colonne (sauf la 1ère).
+    &__col {
+      &:not(:first-child) {
+        padding-inline-start: 0;
+        border-inline-start: none;
+        padding-top: 24px;
+        border-top: 1px solid rgba($white, 0.08);
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    &__top {
+      padding: 28px 0 20px;
+    }
+
+    &__grid {
+      gap: 24px;
+    }
+
+    &__heading {
+      font-size: 0.88rem;
+    }
+
+    &__input {
+      font-size: 0.85rem;
+      padding-block: 11px;
+      padding-inline-start: 38px;
+      padding-inline-end: 14px;
+    }
+
+    &__submit {
+      font-size: 0.88rem;
+      padding-block: 11px;
+    }
+
+    &__bottom {
+      .container {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+      }
+    }
+  }
+}

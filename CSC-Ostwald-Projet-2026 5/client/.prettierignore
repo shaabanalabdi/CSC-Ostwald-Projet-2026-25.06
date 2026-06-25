@@ -1,0 +1,37 @@
+# Build artifacts
+dist/
+build/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Vendor / third-party
+public/leaflet.css
+# MSW service worker (généré par `npx msw init public/`, non édité à la main)
+public/mockServiceWorker.js
+
+# Locales (auto-generated translations — preserve exact format)
+src/locales/**/*.json
+
+# Static assets
+public/documents/
+public/*.xml
+public/*.svg
+public/robots.txt
+
+# Lighthouse reports
+*.report.html
+chromewebdata_*
+localhost_*.report.html
+
+# Misc
+.env
+.env.*
+*.log

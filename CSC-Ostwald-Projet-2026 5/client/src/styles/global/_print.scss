@@ -1,0 +1,36 @@
+// ============================================================
+// _print.scss — Styles d'impression (@media print)
+// Cache la navigation, désactive animations/ombres, force fond blanc.
+// ============================================================
+
+@media print {
+  // Masque les éléments inutiles à l'impression
+  .navbar,
+  .footer,
+  .benevole-form__submit,
+  .inscription__submit,
+  .contact__submit,
+  .accessibility-widget,
+  .hero__controls {
+    display: none !important;
+  }
+
+  // Supprime les animations et ombres pour une impression propre
+  * {
+    animation: none !important;
+    box-shadow: none !important;
+  }
+
+  // Force le fond blanc et le texte noir pour l'encre
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  // Les liens affichent leur URL entre parenthèses
+  a[href]::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.8em;
+    color: #555;
+  }
+}

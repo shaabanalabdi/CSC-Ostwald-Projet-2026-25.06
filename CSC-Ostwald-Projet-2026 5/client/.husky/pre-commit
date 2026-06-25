@@ -1,0 +1,9 @@
+# ============================================================
+# pre-commit hook — lance lint-staged sur les fichiers stagés
+#
+# Husky 9+ : pas de shebang/source nécessaire, juste les commandes.
+# On `cd client` car le git root est à un niveau au-dessus (monorepo).
+# lint-staged lit la config depuis client/package.json.
+# ============================================================
+
+cd client && npx lint-staged

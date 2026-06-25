@@ -1,0 +1,65 @@
+# =====================================================================
+# Dockerfile.api — Build a production image for the CSC Ostwald API.
+#
+# Two-stage build keeps the final image small (~50 MB on Alpine):
+#   1. "deps" stage runs `npm ci --omit=dev` with a cached node_modules
+#      so re-builds skip the install when package*.json didn't change.
+#   2. "runtime" stage copies only the runtime files (no devDependencies,
+#      no tests, no scripts/) — smaller surface = faster restarts.
+#
+# Build context is the repo ROOT (not deploy/) so this Dockerfile sees
+# the api/ folder. See docker-compose.prod.yml:
+#   build:
+#     context: ..
+#     dockerfile: deploy/Dockerfile.api
+# =====================================================================
+
+# ── 1. Install dependencies ─────────────────────────────────────────
+FROM node:22-alpine AS deps
+
+WORKDIR /app
+
+# Copy lockfile + package.json first so Docker caches `npm ci` across
+# code changes (this layer only invalidates when package.json moves).
+COPY api/package.json api/package-lock.json* ./
+RUN npm ci --omit=dev --no-audit --no-fund
+
+# ── 2. Runtime image ────────────────────────────────────────────────
+FROM node:22-alpine AS runtime
+
+# tini is a minimal init process for containers. Without it, Node runs
+# as PID 1 and handles SIGTERM imperfectly — graceful shutdown can lose
+# in-flight requests and connection draining never completes. tini fixes
+# that by reaping zombies and forwarding signals correctly.
+RUN apk add --no-cache tini
+
+# Run as non-root for defense in depth. The `node` user is built-in.
+WORKDIR /app
+
+# Pull installed deps + the API source. We DON'T copy api/uploads or
+# api/.env — uploads are persisted in a Docker volume mounted at
+# /app/uploads, .env values come from docker-compose env_file.
+COPY --from=deps /app/node_modules ./node_modules
+COPY api/package.json ./package.json
+COPY api/src ./src
+COPY api/database.sql ./database.sql
+COPY api/scripts ./scripts
+
+# Created at build time so first start doesn't fail if the volume is
+# empty (the volume mount will shadow it, which is exactly what we want).
+RUN mkdir -p /app/uploads && chown -R node:node /app
+
+USER node
+
+# Tell consumers which port the app listens on. The actual binding is
+# driven by the PORT env var (default 3001) in src/server.js.
+EXPOSE 3001
+
+# Healthcheck — Render/Nginx use this to detect when the app is ready.
+# /api/health now returns 503 when the DB is unreachable, so the healthcheck
+# will fail and the container will be restarted automatically.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3001/api/health || exit 1
+
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["node", "src/server.js"]

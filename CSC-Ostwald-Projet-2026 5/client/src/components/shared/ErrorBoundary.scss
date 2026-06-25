@@ -1,0 +1,89 @@
+@use 'variables' as *;
+
+.error-boundary {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: $font-body;
+
+  &__title {
+    font-size: 1.5rem;
+    color: $bleu-dark;
+  }
+
+  &__text {
+    color: $gray-500;
+    max-width: 400px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  &__btn {
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: $font-body;
+
+    &--primary {
+      background: $orange-dark; // AA-compliant on white text (4.5:1)
+      color: $white;
+      border: none;
+    }
+
+    &--outline {
+      background: transparent;
+      color: $orange-text;
+      border: 2px solid $orange;
+    }
+
+    &--ghost {
+      margin-top: 12px;
+      background: transparent;
+      color: $bleu-dark;
+      border: 1px solid $gray-mid;
+      font-size: 0.82rem;
+    }
+  }
+
+  &__details {
+    margin-top: 16px;
+    width: 100%;
+    max-width: 600px;
+    font-family: $font-body;
+    color: $gray-500;
+
+    summary {
+      cursor: pointer;
+      font-size: 0.88rem;
+      padding: 6px 0;
+      user-select: none;
+    }
+  }
+
+  &__trace {
+    margin: 8px 0;
+    padding: 12px 14px;
+    background: $gray-100;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: $gray-900;
+    text-align: start;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}

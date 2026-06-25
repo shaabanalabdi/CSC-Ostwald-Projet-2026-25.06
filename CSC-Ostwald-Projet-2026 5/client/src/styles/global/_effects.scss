@@ -1,0 +1,125 @@
+// ============================================================
+// _effects.scss — Effets décoratifs « signature »
+//   .spotlight-card  : halo brand qui suit le curseur (hook useSpotlight)
+//   .cursor-glow     : projecteur ambient orange→bleu (CursorGlow.tsx)
+//   .ambient-bubbles : bulles flottantes en arrière-plan (AmbientBubbles.tsx)
+//   .text-reveal     : conteneur split-words pour révéler en cascade (TextReveal.tsx)
+// ============================================================
+
+@use '../variables' as *;
+
+// ===========================
+// MICRO-INTERACTIONS — signature « alive »
+// Patterns réutilisables : spotlight au curseur, ripple au clic, glow
+// Activé via classes utilitaires (ajouter `.spotlight-card` sur n'importe
+// quelle carte, pas besoin de JSX dédié).
+// ===========================
+
+// SPOTLIGHT : halo brand qui suit le curseur sur les cartes.
+// Variables CSS --mx/--my pilotées par le hook useSpotlight.
+// pseudo-élément ::after + mix-blend-mode pour fusionner naturellement
+// avec le contenu (image + texte) sans le masquer.
+.spotlight-card {
+  &::after {
+    display: none !important;
+  }
+}
+
+// ===========================
+// CURSOR GLOW — Halo brand qui suit le curseur (desktop premium)
+// Signature interactive : projecteur ambient orange→bleu en mix-blend-mode.
+// Désactivé automatiquement sur mobile/tactile et en reduced-motion via JSX.
+// ===========================
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 520px;
+  height: 520px;
+  margin-left: -260px; // centrer le blob sur la pointe du curseur
+  margin-top: -260px;
+  border-radius: 50%;
+  pointer-events: none; // ne JAMAIS bloquer l'UI sous le blob
+  z-index: $z-tooltip; // au-dessus du contenu, sous les modales
+  // Gradient radial brand : orange→pink→transparent (warmth CSC)
+  background: radial-gradient(
+    circle,
+    rgba($orange, 0.18) 0%,
+    rgba(#e44d67, 0.08) 35%,
+    transparent 70%
+  );
+  // screen : éclaire les fonds clairs sans noircir les fonds foncés
+  mix-blend-mode: screen;
+  filter: blur(40px);
+  // Transition opacity gérée par framer-motion via style, ici on n'ajoute
+  // qu'une transition de secours pour le 1er fade-in.
+  transition: opacity 0.5s ease;
+  will-change: transform;
+}
+
+// Désactivation explicite quand l'utilisateur a activé un mode a11y haute-contraste
+// ou négatif (les blend-modes deviennent illisibles dans ces contextes).
+body.a11y-high-contrast .cursor-glow,
+body.a11y-negative .cursor-glow,
+body.a11y-grayscale .cursor-glow {
+  display: none;
+}
+
+// Sécurité : reduced motion désactive aussi le blob (le JSX retourne null,
+// mais on garde la règle CSS si jamais on rend en SSR différemment plus tard)
+@media (prefers-reduced-motion: reduce) {
+  .cursor-glow {
+    display: none;
+  }
+}
+
+// AMBIENT BUBBLES : conteneur de bulles flottantes en arrière-plan.
+// Animation passive (pas de JS), respecte prefers-reduced-motion.
+.ambient-bubbles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+
+  &__bubble {
+    position: absolute;
+    border-radius: 50%;
+    animation: none;
+    opacity: 0.15;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__bubble {
+      animation: none;
+      opacity: 0.3;
+    }
+  }
+}
+
+@keyframes bubbleFloat {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(12px, -18px) scale(1.08);
+  }
+  66% {
+    transform: translate(-10px, 14px) scale(0.95);
+  }
+}
+
+// TEXT REVEAL : conteneur pour révéler les mots en cascade.
+// Le composant React (TextReveal.tsx) split le texte en spans, framer-motion
+// pilote la cascade. Ici on garantit juste un layout propre pour le split.
+.text-reveal {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25em;
+
+  &__word {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+}

@@ -1,0 +1,179 @@
+// ============================================================
+// _btn-bubble.scss — CTA en bubble (Instagram-style)
+//
+// Variante "bubble" pour les CTA visuellement forts (Hero, Bénévole, Don, etc.).
+// N'hérite PAS de .btn — réutilise la mécanique .csc-bubble + comportements bouton.
+//
+// Usage :
+//   <a class="btn-bubble btn-bubble--orange btn-bubble--shadow">Découvrir</a>
+//   <button class="btn-bubble btn-bubble--pink btn-bubble--tab-bottom">Je m'inscris</button>
+//
+// Toujours ≥ 44px de touch target (WCAG 2.5.5 AAA).
+// Dépendance : @extend .csc-bubble → ce partial DOIT être chargé après _csc-bubble.scss.
+// ============================================================
+
+@use '../variables' as *;
+// Charge csc-bubble pour autoriser `@extend .csc-bubble` à travers les modules.
+// Sass `@use` règle : @extend ne voit les sélecteurs d'un autre module que
+// si ce module est explicitement chargé ici.
+@use 'csc-bubble';
+
+.btn-bubble {
+  @extend .csc-bubble;
+  // Comportements bouton ─────────────────────────────────────
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  // Taille bouton CTA : un peu plus petite que le .csc-bubble md "titre"
+  // pour rester ergonomique en CTA (≈48px touch target).
+  padding: 14px 30px;
+  font-size: 1.05rem;
+  letter-spacing: 1.4px;
+  min-height: 48px;
+  // Conteneur inline-flex pour aligner icône + texte sans casser le pseudo ::after du tab
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  transition:
+    $transition-transform,
+    $transition-shadow,
+    background-color $transition-base $ease-out;
+  will-change: transform;
+
+  // Icônes embarquées (FaArrowRight, FaDownload, etc.)
+  svg {
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+  }
+
+  // ─── HOVER : lift + micro-rotation (esprit Instagram) ───────────
+  &:hover:not(:disabled) {
+    transform: translateY(-3px) rotate(-1deg);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+  }
+
+  // Si la bubble a déjà un tilt, le hover ne réajoute pas de rotation cumulée
+  &.csc-bubble--tilt-left:hover:not(:disabled),
+  &--tilt-left:hover:not(:disabled) {
+    transform: translateY(-3px) rotate(-4deg);
+  }
+  &.csc-bubble--tilt-right:hover:not(:disabled),
+  &--tilt-right:hover:not(:disabled) {
+    transform: translateY(-3px) rotate(2deg);
+  }
+
+  // ─── ACTIVE (press) ─────────────────────────────────────────────
+  &:active:not(:disabled) {
+    transform: translateY(0) rotate(0);
+    transition-duration: $transition-fast;
+  }
+
+  // ─── FOCUS VISIBLE (keyboard nav) ───────────────────────────────
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 4px rgba($orange, 0.35),
+      0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+
+  // ─── DISABLED ───────────────────────────────────────────────────
+  &:disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  // ─── VARIANTES couleur ──────────────────────────────────────────
+  // @extend .csc-bubble ne propage PAS les modifiers `&--blue`/`&--green`
+  // etc. — il étend uniquement la règle de base. Sans ces déclarations,
+  // un `<button class="btn-bubble btn-bubble--blue">` retombait sur le
+  // fond orange du .csc-bubble de base, créant un contraste raté
+  // (texte blanc sur orange clair, ratio 2.32 — échec WCAG AA).
+  //
+  // Les couleurs reflètent celles de _csc-bubble.scss (orange-dark / bleu /
+  // green-text / pink foncé) qui passent toutes WCAG AA Normal text.
+  &--orange {
+    background: $orange-dark;
+    color: $white;
+  }
+  &--blue {
+    background: $bleu;
+    color: $white;
+  }
+  &--green {
+    background: $green-text;
+    color: $white;
+  }
+  &--pink {
+    background: #c83a55;
+    color: $white;
+  }
+  &--yellow {
+    background: #f4d03f;
+    color: $bleu-dark;
+  }
+
+  // Focus ring par couleur — visuel du keyboard nav cohérent avec la teinte.
+  &--blue:focus-visible {
+    box-shadow:
+      0 0 0 4px rgba($bleu, 0.35),
+      0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+  &--green:focus-visible {
+    box-shadow:
+      0 0 0 4px rgba($green, 0.35),
+      0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+  &--pink:focus-visible {
+    box-shadow:
+      0 0 0 4px rgba(#e44d67, 0.35),
+      0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+
+  // ─── TAILLE BLOCK (full-width) ──────────────────────────────────
+  &--block {
+    display: flex;
+    width: 100%;
+  }
+}
+
+// Désactive le lift hover en reduced-motion (déjà couvert par règle globale,
+// mais on garde un keep-color hover pour feedback visuel).
+@media (prefers-reduced-motion: reduce) {
+  .btn-bubble:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+// ─── RIPPLE : feedback tactile au clic sur les CTA bubble ─────────
+// Réalisé via background-image radial-gradient animé (pas de JS).
+// Le `:active` déclenche, le `:not(:active)` réinitialise avec transition courte.
+.btn-bubble {
+  background-position: center;
+  transition:
+    background 0.5s,
+    transform 0.2s,
+    box-shadow 0.3s,
+    color 0.2s;
+
+  &:active {
+    background-size: 100%;
+    transition: background 0s;
+  }
+
+  // Effet ripple : couleur claire qui irradie depuis le centre au clic
+  &--orange:active {
+    background-image: radial-gradient(circle, transparent 1%, $orange-dark 1%);
+  }
+  &--bleu:active {
+    background-image: radial-gradient(circle, transparent 1%, $bleu-dark 1%);
+  }
+  &--green:active {
+    background-image: radial-gradient(circle, transparent 1%, $green-text 1%);
+  }
+}

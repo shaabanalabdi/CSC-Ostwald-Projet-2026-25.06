@@ -1,0 +1,200 @@
+@use 'variables' as *;
+@use 'sass:color';
+
+.a11y-widget {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+
+  // ===========================
+  // BOUTON DÉCLENCHEUR
+  // ===========================
+  &__trigger {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: $bleu;
+    color: $white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $orange;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba($orange, 0.4);
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      background 0.2s;
+
+    &:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 22px rgba($orange, 0.5);
+    }
+
+    &--active {
+      background: color.adjust($bleu, $lightness: -8%);
+      border-color: $orange-text;
+    }
+  }
+
+  // ===========================
+  // PANEL
+  // ===========================
+  &__panel {
+    position: absolute;
+    bottom: 58px;
+    left: 20px;
+    width: 270px;
+    background: $surface-muted;
+    border-radius: $radius-lg2;
+    padding: 16px 14px 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    animation: a11yPanelIn 0.2s ease;
+    will-change: transform, opacity;
+  }
+
+  &__title {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: $gray-500;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // ===========================
+  // ITEMS
+  // ===========================
+  &__item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    padding: 10px 12px;
+    border-radius: $radius-md;
+    font-size: 14px;
+    font-weight: 600;
+    color: $gray-800;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition:
+      background 0.15s,
+      color 0.15s;
+
+    &:hover {
+      background: rgba($bleu, 0.1);
+      color: $bleu;
+
+      .a11y-widget__icon {
+        color: $bleu;
+      }
+    }
+
+    &--active {
+      background: $bleu;
+      color: $white;
+
+      .a11y-widget__icon {
+        color: $white;
+      }
+
+      &:hover {
+        background: color.adjust($bleu, $lightness: -8%);
+        color: $white;
+      }
+    }
+
+    &--reset {
+      color: $error;
+      margin-top: 4px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      padding-top: 12px;
+
+      &:hover {
+        background: rgba($error, 0.08);
+        color: $error;
+        .a11y-widget__icon {
+          color: $error;
+        }
+      }
+    }
+  }
+
+  &__icon {
+    font-size: 20px;
+    color: $gray-800;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+}
+
+@keyframes a11yPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ===========================
+// RESPONSIVE
+// ===========================
+@media (max-width: 768px) {
+  .a11y-widget {
+    bottom: auto;
+    left: auto;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    flex-direction: column;
+
+    &__trigger {
+      border-radius: 8px 0 0 8px;
+      width: 38px;
+      height: 44px;
+      font-size: 18px;
+      box-shadow: -2px 2px 12px rgba($orange, 0.4);
+    }
+
+    &__panel {
+      position: fixed;
+      top: 50%;
+      right: 46px;
+      left: auto;
+      bottom: auto;
+      transform: translateY(-50%);
+      width: 260px;
+      max-width: calc(100vw - 60px);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .a11y-widget {
+    &__panel {
+      width: 240px;
+      max-width: calc(100vw - 56px);
+    }
+  }
+}

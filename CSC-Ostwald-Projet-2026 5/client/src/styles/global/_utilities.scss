@@ -1,0 +1,73 @@
+// ============================================================
+// _utilities.scss — Classes utilitaires layout (container, stack, section-title)
+// ============================================================
+
+@use '../variables' as *;
+
+.container {
+  max-width: $container-base;
+  margin: 0 auto;
+  padding: 0 $space-5;
+
+  &--narrow {
+    max-width: $container-narrow;
+  }
+  &--wide {
+    max-width: $container-wide;
+  }
+  &--xl {
+    max-width: $container-xl;
+  }
+  &--fluid {
+    max-width: 100%;
+  }
+}
+
+// Stack — espacement vertical homogène entre enfants (équivalent space-y de Tailwind)
+.stack > * + * {
+  margin-top: $space-4;
+}
+.stack-sm > * + * {
+  margin-top: $space-2;
+}
+.stack-lg > * + * {
+  margin-top: $space-6;
+}
+.stack-xl > * + * {
+  margin-top: $space-8;
+}
+
+.section-title {
+  font-size: clamp(#{$text-2xl}, 3vw, #{$text-3xl});
+  font-weight: $font-bold;
+  color: $bleu;
+  margin-bottom: $space-4;
+  letter-spacing: $tracking-tight;
+  line-height: $leading-tight;
+  text-wrap: balance;
+  position: relative;
+  padding-bottom: $space-2;
+
+  // Underline gradient — finit en fade (style éditorial moderne)
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    inset-inline-start: 0;
+    display: block;
+    width: 64px;
+    height: 3px;
+    background: linear-gradient(90deg, $orange 0%, $orange 40%, rgba($orange, 0) 100%);
+    border-radius: $radius-pill;
+  }
+
+  // Variant centré
+  &--center {
+    text-align: center;
+
+    &::after {
+      inset-inline-start: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}

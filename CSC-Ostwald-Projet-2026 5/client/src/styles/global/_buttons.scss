@@ -1,0 +1,147 @@
+// ============================================================
+// _buttons.scss — Système .btn de base (primary/secondary/outline/ghost)
+// + tailles -sm / -lg / -block.
+// La variante .btn-bubble (style Instagram) est dans `_btn-bubble.scss`.
+// ============================================================
+
+@use 'sass:color';
+@use '../variables' as *;
+
+// ===========================
+// BUTTON SYSTEM — Phase C1 (UI/UX Pro Max)
+// .btn = base réutilisable | variantes : -primary, -secondary, -outline, -ghost
+// Tailles : -sm (32px), default (44px), -lg (52px) — toutes respectent WCAG 2.5.5 (≥44px par défaut).
+// ===========================
+
+.btn {
+  // Base — toutes les variantes héritent de ces propriétés
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  // Touch target ≥ 44px AAA (Apple HIG + WCAG)
+  min-height: 44px;
+  padding: $space-3 $space-5;
+  border: 1px solid transparent;
+  border-radius: $radius-pill;
+  font-family: inherit;
+  font-size: $text-sm;
+  font-weight: $font-semibold;
+  line-height: 1;
+  letter-spacing: $tracking-wide;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: $transition-colors, $transition-transform, $transition-shadow;
+
+  // Disabled — opacité réduite + curseur explicite + non-tappable
+  &:disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  // Focus visible (clavier uniquement) — ring orange réutilisable
+  &:focus-visible {
+    outline: none;
+    box-shadow: $ring-orange, $elevation-2;
+  }
+
+  // Active (press) — léger enfoncement
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    transition-duration: $transition-fast;
+  }
+
+  // Icônes inline
+  svg {
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 1.1em;
+  }
+}
+
+// ─── Variante : Primary (orange CTA) ─────────────────────────────
+.btn-primary {
+  @extend .btn;
+  background: $orange;
+  color: $white;
+  border-color: $orange;
+  box-shadow: $shadow-orange;
+
+  &:hover:not(:disabled) {
+    background: $orange-dark;
+    border-color: $orange-dark;
+    transform: translateY(-2px);
+    box-shadow: $shadow-orange-lg;
+  }
+}
+
+// ─── Variante : Secondary (vert ou bleu) ─────────────────────────
+.btn-secondary {
+  @extend .btn;
+  background: $bleu;
+  color: $white;
+  border-color: $bleu;
+  box-shadow: $shadow-bleu;
+
+  &:hover:not(:disabled) {
+    background: color.adjust($bleu, $lightness: -8%);
+    border-color: color.adjust($bleu, $lightness: -8%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba($bleu, 0.45);
+  }
+}
+
+// ─── Variante : Outline (bordure orange, fond transparent) ───────
+.btn-outline {
+  @extend .btn;
+  background: transparent;
+  color: $orange-text;
+  border-color: $orange;
+  text-shadow: none;
+
+  &:hover:not(:disabled) {
+    background: $orange;
+    color: $white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    box-shadow: $shadow-orange;
+  }
+}
+
+// ─── Variante : Ghost (fond transparent, hover subtil) ───────────
+.btn-ghost {
+  @extend .btn;
+  background: transparent;
+  color: $orange-text;
+  border-color: transparent;
+  text-shadow: none;
+
+  &:hover:not(:disabled) {
+    background: rgba($orange, 0.1);
+  }
+}
+
+// ─── Tailles ─────────────────────────────────────────────────────
+.btn-sm {
+  min-height: 36px;
+  padding: $space-2 $space-4;
+  font-size: $text-xs;
+  gap: $space-1;
+}
+
+.btn-lg {
+  min-height: 52px;
+  padding: $space-4 $space-7;
+  font-size: $text-base;
+  gap: $space-3;
+}
+
+.btn-block {
+  width: 100%;
+}

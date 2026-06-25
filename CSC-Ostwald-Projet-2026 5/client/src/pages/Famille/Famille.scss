@@ -1,0 +1,297 @@
+@use 'variables' as *;
+
+// ===========================
+// HERO
+// ===========================
+.famille__hero {
+  padding-top: 100px;
+  padding-bottom: 60px;
+  background: $white;
+  max-width: 860px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+// Titre hero (bubble orange XL) — centré sur la page
+.famille__hero-title {
+  display: block !important;
+  margin: 0 auto 24px;
+  width: fit-content;
+}
+
+.famille__hero-intro {
+  // $orange-text (#9c5f00) — donne 5.0:1 avec texte blanc, vs 4.2 sur
+  // $orange-dark et 2.71 sur $orange brand. Passe WCAG AA Normal text.
+  // Le ton reste chaleureux (brun-orangé reconnaissable comme CSC).
+  background: $orange-text;
+  color: $white;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.7;
+  padding: 20px 28px;
+  border-radius: $radius;
+  // Override l'inline-flex de .text-reveal (qui empêchait margin: 0 auto
+  // de centrer). display: flex + width: fit-content rend l'élément
+  // block-level avec largeur de contenu → margin-inline: auto centre.
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center; // centrage du texte à l'intérieur
+  width: fit-content;
+  margin: 0 auto 40px; // centrage horizontal du bloc dans .famille__hero
+}
+
+.famille__stats {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-top: 32px;
+}
+
+.famille__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.famille__stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: $orange-text;
+}
+
+.famille__stat-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $bleu-dark;
+}
+
+// ===========================
+// ACTIVITÉS
+// ===========================
+.famille__activites {
+  background: $surface-muted;
+  padding: 60px 0;
+}
+
+.famille__contact {
+  margin-top: 40px;
+  background: rgba($orange, 0.08);
+  border-left: 4px solid $orange;
+  padding: 20px 24px;
+  border-radius: $radius;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.famille__renseignement {
+  font-size: 1rem;
+  font-weight: 600;
+  color: $bleu-dark;
+  margin: 0;
+}
+
+.famille__contact-coords {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: $bleu-dark;
+}
+
+// Titre section activités (bubble orange) — centré
+.famille__activites-title {
+  display: block !important;
+  margin: 0 auto $space-3;
+  width: fit-content;
+}
+
+.famille__activites-desc {
+  font-size: 0.93rem;
+  color: $bleu-dark;
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+// ===========================
+// GRILLE CARTES
+// ===========================
+.famille__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.famille__card {
+  background: $white;
+  // Blob radius (style wireframe mai 2026) — 4 patterns cycliques.
+  // ⚠️ border-top:3px ne se voit pas aux coins arrondis → remplacé par
+  // un box-shadow inset orange pour préserver l'accent couleur Famille.
+  border-radius: 60px 16px 50px 16px;
+  overflow: hidden;
+  box-shadow:
+    $elevation-2,
+    inset 0 4px 0 $orange;
+  display: flex;
+  flex-direction: column;
+
+  &:nth-child(4n + 2) {
+    border-radius: 16px 60px 16px 50px;
+  }
+  &:nth-child(4n + 3) {
+    border-radius: 50px 16px 60px 16px;
+  }
+  &:nth-child(4n + 4) {
+    border-radius: 16px 50px 16px 60px;
+  }
+}
+
+.famille__card-img {
+  position: relative;
+  height: 200px;
+  background: $green;
+  overflow: hidden;
+
+  // Overlay subtil au hover (effet de profondeur)
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.5));
+    opacity: 0;
+    transition: opacity $transition-base $ease-out;
+  }
+}
+
+// Bubble fréquence (HEBDO/MENSUEL) — overlay top-end
+.famille__card-badge {
+  position: absolute !important;
+  top: $space-3;
+  inset-inline-end: $space-3;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: $white !important;
+  color: $green-text !important;
+  border: 1px solid $green-text;
+}
+
+.famille__card-body {
+  padding: 20px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.famille__card-categorie {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: $bleu;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+// Titre carte (bubble orange) — centré dans le body
+.famille__card-titre {
+  display: block !important;
+  margin: 0 auto 10px;
+  width: fit-content;
+}
+
+.famille__card-desc {
+  font-size: 0.88rem;
+  color: $text-muted;
+  line-height: 1.7;
+  flex: 1;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.famille__card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.famille__card-tag {
+  background: $gray-100;
+  color: $bleu-dark;
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: $radius-xl;
+}
+
+.famille__card-cta {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: $orange;
+  text-decoration: none;
+  transition: $transition;
+
+  &:hover {
+    color: $orange-dark;
+  }
+}
+
+// ===========================
+// RESPONSIVE — TABLETTE
+// ===========================
+@media (max-width: 768px) {
+  // Section padding mobile : 60px → 40px (espacement plus serré)
+  .famille__activites {
+    padding: 40px 0;
+  }
+
+  // Hero polish mobile : padding réduit, intro compact
+  .famille__hero {
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+
+  .famille__hero-title {
+    font-size: 1.7rem;
+  }
+
+  .famille__hero-intro {
+    padding: 16px 20px;
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+  }
+
+  .famille__stats {
+    gap: 40px;
+  }
+
+  .famille__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  // Hero polish très petit mobile : padding minimal mais respirable
+  .famille__hero {
+    padding-top: 70px;
+    padding-bottom: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .famille__hero-title {
+    font-size: 1.4rem;
+  }
+
+  .famille__hero-intro {
+    font-size: 0.9rem;
+    padding: 14px 18px;
+    line-height: 1.6;
+  }
+
+  .famille__stats {
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+}

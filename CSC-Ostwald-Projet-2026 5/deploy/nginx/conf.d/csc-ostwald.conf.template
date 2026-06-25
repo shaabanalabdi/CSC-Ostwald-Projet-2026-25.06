@@ -1,0 +1,132 @@
+# =====================================================================
+# csc-ostwald.conf — Production HTTPS config.
+#
+# Activated AFTER the first Let's Encrypt cert has been issued (see
+# scripts/init-letsencrypt.sh). Until then, use csc-ostwald-http.conf
+# which serves HTTP only so certbot can complete the ACME challenge.
+#
+# This file is a TEMPLATE — replace `__DOMAIN__` with the real domain
+# (e.g. csc-ostwald.fr) via the init-letsencrypt.sh script, OR rename
+# this file to .conf and edit the two server blocks manually.
+# =====================================================================
+
+# ── 1. Redirect plain HTTP to HTTPS ─────────────────────────────────
+server {
+  listen 80;
+  listen [::]:80;
+  server_name __DOMAIN__ www.__DOMAIN__;
+
+  # ACME HTTP-01 challenge — certbot writes proof files here for renewal.
+  # Keep this BEFORE the redirect rule so renewal works over HTTP.
+  location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+  }
+
+  location / {
+    return 301 https://$host$request_uri;
+  }
+}
+
+# ── 2. Production HTTPS server ──────────────────────────────────────
+server {
+  listen 443 ssl;
+  listen [::]:443 ssl;
+  http2 on;
+  server_name __DOMAIN__ www.__DOMAIN__;
+
+  ssl_certificate     /etc/letsencrypt/live/__DOMAIN__/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/__DOMAIN__/privkey.pem;
+
+  # Modern TLS only (no SSLv3, no TLS 1.0/1.1).
+  ssl_protocols TLSv1.2 TLSv1.3;
+  ssl_prefer_server_ciphers off;
+  ssl_session_cache shared:SSL:10m;
+  ssl_session_timeout 1d;
+
+  # ── Security headers ─────────────────────────────────────────────
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+  add_header X-Content-Type-Options "nosniff" always;
+  add_header X-Frame-Options "DENY" always;
+  add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+  add_header Permissions-Policy "geolocation=(), camera=(), microphone=(), interest-cohort=()" always;
+  # CSP: same-origin everything except the OpenStreetMap tiles used by
+  # Leaflet on /contact, the HelloAsso checkout form action, and a small
+  # number of data:/inline rules React + framer-motion need at runtime.
+  # If you change the hosting model (e.g. split API to api.csc-ostwald.fr)
+  # add the new origin to `connect-src` AND `img-src`.
+  add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.tile.openstreetmap.org; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://www.helloasso.com https://checkout.helloasso.com" always;
+
+  # ── Compression — gzip is enough; brotli needs a custom build ────
+  gzip on;
+  gzip_types text/plain text/css application/json application/javascript text/xml
+             application/xml application/xml+rss text/javascript image/svg+xml;
+  gzip_min_length 1024;
+
+  # ── Upload size limit for /api/admin/upload (multer cap = 5 MB) ──
+  client_max_body_size 6m;
+
+  # ── /api/* → Node API (Express) ──────────────────────────────────
+  location /api/ {
+    proxy_pass http://api:3001;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    # JWT cookies use HttpOnly + Secure — nginx passes them through unchanged.
+    proxy_pass_request_headers on;
+    proxy_read_timeout 30s;
+  }
+
+  # ── /uploads/* → static files served by Express ──────────────────
+  # express.static handles caching; we just proxy + keep the path.
+  location /uploads/ {
+    proxy_pass http://api:3001;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_cache_valid 200 1y;
+  }
+
+  # ── Hashed assets from Vite — long cache (filename-versioned) ────
+  location /assets/ {
+    root /usr/share/nginx/html;
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+    access_log off;
+    try_files $uri =404;
+  }
+
+  # ── Other static files (favicon, fonts, documents) ──────────────
+  location ~ ^/(fonts|documents)/ {
+    root /usr/share/nginx/html;
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+    access_log off;
+  }
+
+  # ── ACME challenge — keep it accessible over HTTPS too ──────────
+  location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+  }
+
+  # ── Admin SPA fallback — same as / but with noindex ─────────────
+  # The admin UI is publicly reachable (the login form has to be) but
+  # we never want search engines to index it. X-Robots-Tag is the right
+  # tool here (robots.txt would advertise the admin path).
+  location /admin/ {
+    root /usr/share/nginx/html;
+    try_files $uri $uri/ /index.html;
+    add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+    add_header X-Robots-Tag "noindex, nofollow" always;
+  }
+
+  # ── SPA fallback — every other route serves /index.html ─────────
+  # Vite's React Router needs this so /a-propos etc. load on hard refresh.
+  location / {
+    root /usr/share/nginx/html;
+    try_files $uri $uri/ /index.html;
+    # index.html itself must NOT be cached aggressively — otherwise
+    # users keep an old SPA bundle reference after deploys.
+    add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+  }
+}

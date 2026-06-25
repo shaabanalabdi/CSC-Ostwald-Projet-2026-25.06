@@ -1,0 +1,100 @@
+// ============================================================
+// _mixins.scss — Helpers SCSS partagés
+//
+// Importé via `@use 'mixins' as *;` dans n'importe quel partial qui
+// a besoin d'un mixin. Les `$bp-*` viennent de `_variables.scss`.
+// ============================================================
+
+@use 'variables' as *;
+
+// ─────────────────────────────────────────────────────────────
+// respond-to($bp) — media query helper « mobile first »
+// ─────────────────────────────────────────────────────────────
+// Usage :
+//   @include respond-to('md') { ... }   // ≥ 768px
+//   @include respond-to('lg') { ... }   // ≥ 1024px
+//
+// Évite de répéter `@media (min-width: ...)` partout et de hard-coder
+// des valeurs en pixels qui dérivent quand on change un breakpoint.
+//
+// Mobile-first : on cible UP (min-width), pas DOWN (max-width). Le style
+// par défaut est mobile, on l'enrichit pour les écrans plus larges.
+// ─────────────────────────────────────────────────────────────
+@mixin respond-to($bp) {
+  @if $bp == 'xs' {
+    @media (min-width: $bp-xs) {
+      @content;
+    }
+  } @else if $bp == 'sm' {
+    @media (min-width: $bp-sm) {
+      @content;
+    }
+  } @else if $bp == 'md' {
+    @media (min-width: $bp-md) {
+      @content;
+    }
+  } @else if $bp == 'lg' {
+    @media (min-width: $bp-lg) {
+      @content;
+    }
+  } @else if $bp == 'xl' {
+    @media (min-width: $bp-xl) {
+      @content;
+    }
+  } @else if $bp == '2xl' {
+    @media (min-width: $bp-2xl) {
+      @content;
+    }
+  } @else {
+    @error "respond-to: breakpoint inconnu « #{$bp} ». Valeurs valides : xs, sm, md, lg, xl, 2xl.";
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// respond-down($bp) — variante « desktop-first » (max-width)
+// ─────────────────────────────────────────────────────────────
+// Utile quand on a un comportement par défaut desktop et qu'on veut
+// adapter aux petits écrans (ex: stack vertical < md).
+//
+//   @include respond-down('md') { ... }   // < 768px
+// ─────────────────────────────────────────────────────────────
+@mixin respond-down($bp) {
+  @if $bp == 'xs' {
+    @media (max-width: $bp-xs - 1px) {
+      @content;
+    }
+  } @else if $bp == 'sm' {
+    @media (max-width: $bp-sm - 1px) {
+      @content;
+    }
+  } @else if $bp == 'md' {
+    @media (max-width: $bp-md - 1px) {
+      @content;
+    }
+  } @else if $bp == 'lg' {
+    @media (max-width: $bp-lg - 1px) {
+      @content;
+    }
+  } @else if $bp == 'xl' {
+    @media (max-width: $bp-xl - 1px) {
+      @content;
+    }
+  } @else if $bp == '2xl' {
+    @media (max-width: $bp-2xl - 1px) {
+      @content;
+    }
+  } @else {
+    @error "respond-down: breakpoint inconnu « #{$bp} ». Valeurs valides : xs, sm, md, lg, xl, 2xl.";
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// reduced-motion — wraps @media (prefers-reduced-motion: reduce)
+// ─────────────────────────────────────────────────────────────
+//   @include reduced-motion { animation: none; }
+// ─────────────────────────────────────────────────────────────
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}

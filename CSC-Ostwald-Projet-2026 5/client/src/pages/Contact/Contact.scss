@@ -1,0 +1,493 @@
+@use 'variables' as *;
+
+// ===========================
+// PAGE WRAPPER
+// ===========================
+.contact {
+  min-height: 100vh;
+  background: $surface-muted;
+}
+
+// ===========================
+// HERO
+// ===========================
+.contact__hero {
+  background: $white;
+  border-bottom: 1px solid $gray-200;
+  padding: 108px 20px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 88px 20px 28px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 76px 16px 20px;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 10% 50%, rgba($bleu, 0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 90% 20%, rgba($orange, 0.05) 0%, transparent 65%);
+    pointer-events: none;
+  }
+}
+
+// Le contenu du hero doit être au-dessus de l'atmosphère (GradientMesh + Grain)
+.contact__hero-badge,
+.contact__hero-title,
+.contact__hero-sub {
+  position: relative;
+  z-index: 2;
+}
+
+.contact__hero-badge {
+  display: inline-block;
+  background: $orange;
+  color: $white;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: $radius-xs;
+  margin-bottom: 18px;
+}
+
+.contact__hero-title {
+  font-size: clamp(1.4rem, 5vw, 1.875rem);
+  font-weight: 900;
+  color: $bleu-dark;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+
+  span {
+    color: $orange-text;
+  }
+}
+
+.contact__hero-sub {
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  color: $gray-500;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+// ===========================
+// MAIN GRID
+// ===========================
+.contact__body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+
+  @media (max-width: 820px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ===========================
+// CARD (shared)
+// ===========================
+.contact__card {
+  background: $white;
+  border-radius: $radius-lg;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+}
+
+.contact__card-header {
+  background: $bleu;
+  padding: 16px 24px;
+
+  h2 {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $white;
+    margin: 0;
+  }
+}
+
+.contact__card-body {
+  padding: 24px;
+}
+
+// ===========================
+// FORM
+// ===========================
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact__fields-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contact__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.contact__label {
+  font-size: $text-xs;
+  font-weight: $font-bold;
+  letter-spacing: $tracking-wider;
+  text-transform: uppercase;
+  color: $gray-700;
+
+  span {
+    color: $orange-text;
+    margin-inline-start: 2px; // RTL-safe
+  }
+}
+
+.contact__input,
+.contact__select,
+.contact__textarea {
+  width: 100%;
+  min-height: 44px; // WCAG 2.5.5 AAA touch target
+  padding: $space-3 $space-4;
+  border: 1.5px solid $gray-200;
+  // Blob radius (style wireframe mai 2026) — forme organique légère pour inputs
+  border-radius: 18px 6px 14px 6px;
+  font-size: $text-base; // 16px — évite l'auto-zoom iOS
+  font-family: inherit;
+  color: $bleu-dark;
+  background: $gray-50;
+  box-sizing: border-box;
+  outline: none;
+  transition: $transition-colors, $transition-shadow;
+
+  &::placeholder {
+    color: $gray-400;
+  }
+
+  &:hover:not(:disabled):not(:read-only) {
+    border-color: $gray-300;
+  }
+
+  &:focus {
+    border-color: $orange;
+    background: $white;
+    box-shadow: $ring-orange;
+  }
+
+  &[aria-invalid='true'] {
+    border-color: $error;
+
+    &:focus {
+      box-shadow: $ring-error;
+    }
+  }
+}
+
+// Variantes blob distinctes par type — crée un rythme organique entre les champs.
+// On garde des radius modérés pour conserver la lisibilité des inputs.
+.contact__select {
+  border-radius: 6px 18px 6px 14px;
+}
+
+.contact__textarea {
+  border-radius: 22px 8px 18px 8px;
+}
+
+// Cycle blob sur les paires de champs côte à côte (.contact__fields-row).
+// Chaque rangée alterne 2 patterns pour casser l'uniformité visuelle.
+.contact__fields-row {
+  .contact__field:nth-child(2) .contact__input {
+    border-radius: 6px 18px 6px 14px;
+  }
+}
+
+.contact__select {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230132cc' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $space-4 center;
+  padding-inline-end: $space-10;
+
+  // RTL : flèche à gauche
+  [dir='rtl'] & {
+    background-position: left $space-4 center;
+    padding-inline-end: $space-4;
+    padding-inline-start: $space-10;
+  }
+}
+
+.contact__textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: $leading-relaxed;
+}
+
+.contact__error {
+  font-size: 0.78rem;
+  color: $error;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &::before {
+    content: '!';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 13px;
+    height: 13px;
+    background: $error;
+    color: $white;
+    border-radius: 50%;
+    font-size: 9px;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+}
+
+// Bouton "Envoyer" du formulaire de contact — Primary CTA (orange brand)
+// Utilise les tokens du design system pour cohérence avec tous les autres CTAs.
+// .contact__submit = uniquement positionnement. Le rendu visuel est piloté
+// par .btn-bubble (Instagram CSC) — voir global.scss.
+.contact__submit {
+  align-self: flex-end;
+  margin-top: $space-1;
+
+  @media (max-width: 480px) {
+    width: 100%;
+    align-self: stretch;
+  }
+}
+
+// ===========================
+// INFO SECTION
+// ===========================
+.contact__info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contact__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid $surface-muted;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.contact__info-category {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: $orange-text;
+}
+
+.contact__info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: $bleu-dark;
+
+  svg {
+    color: $bleu;
+    margin-top: 2px;
+    flex-shrink: 0;
+    font-size: 1rem;
+  }
+}
+
+.contact__info-link {
+  color: $bleu;
+  font-weight: 600;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $orange-text;
+    text-decoration: underline;
+  }
+}
+
+// ===========================
+// HOURS TABLE
+// ===========================
+.contact__hours {
+  width: 100%;
+  border-collapse: collapse;
+
+  tr {
+    border-bottom: 1px solid $surface-muted;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  td {
+    padding: 7px 0;
+    font-size: 0.87rem;
+
+    &:first-child {
+      font-weight: 600;
+      color: $bleu-dark;
+      width: 55%;
+    }
+
+    &:last-child {
+      color: $orange-text;
+      font-weight: 700;
+      text-align: right;
+    }
+  }
+}
+
+.contact__hours-closed {
+  // #6b7280 (gray-500) à la place de #9ca3af (gray-400) — passe WCAG AA
+  // Normal (5.3:1 sur blanc) vs 2.53:1 précédemment. Reste visuellement
+  // plus pâle que le texte principal pour signifier "fermé".
+  color: $gray-500 !important;
+}
+
+.contact__hours-exceptional {
+  th,
+  td {
+    color: $green-text !important;
+    font-weight: 700 !important;
+    background: rgba($green, 0.07);
+  }
+
+  th::before {
+    content: '● ';
+    font-size: 0.6rem;
+    vertical-align: middle;
+  }
+}
+
+// ===========================
+// MAP
+// ===========================
+// Conteneur de la carte Leaflet (OpenStreetMap, RGPD-compliant)
+.contact__map {
+  margin-top: 18px;
+  border-radius: $radius;
+  overflow: hidden;
+  border: 1px solid $gray-200;
+  height: 280px;
+
+  // Le MapContainer de react-leaflet remplit tout le conteneur
+  .leaflet-container {
+    width: 100%;
+    height: 100%;
+    font-family: inherit;
+  }
+
+  // Popup avec un look cohérent avec la charte du site
+  .leaflet-popup-content {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  // Liens d'attribution OpenStreetMap discrets
+  .leaflet-control-attribution a {
+    color: $bleu;
+  }
+}
+
+// Marqueur personnalisé CSC : le logo PNG n'est pas transparent,
+// donc on le recadre en cercle + ajoute un anneau blanc + ombre portée
+// pour qu'il ressemble à un pin de carte propre.
+.leaflet-csc-marker {
+  border-radius: 50%;
+  background: $white;
+  object-fit: cover;
+  border: 2px solid $white;
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+// Case RGPD : consentement obligatoire avant envoi du message
+.contact__rgpd {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: $bleu-dark;
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    flex-shrink: 0;
+    margin-top: 2px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: $orange-text;
+  }
+
+  &-link {
+    color: $bleu;
+    text-decoration: underline;
+
+    &:hover {
+      color: $orange-text;
+    }
+  }
+}
+
+// Liste des emails par service (5 adresses distinctes)
+.contact__emails-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 0;
+    border-bottom: 1px dashed $gray-200;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.contact__email-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $bleu;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}

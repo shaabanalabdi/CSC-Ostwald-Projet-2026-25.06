@@ -1,0 +1,127 @@
+// ============================================================
+// _layout-blocks.scss — Blocs de mise en page transversaux
+//   .page-header  : bandeau titre en haut de chaque page (style Instagram)
+//   .section/-alt/-tight/-large  : padding fluide via clamp()
+// + ajustements responsive du .section-title (défini dans _utilities.scss).
+//
+// Dépendance : .page-header utilise @extend .csc-bubble et .csc-bubble--*,
+// donc ce partial DOIT être chargé après `_csc-bubble.scss`.
+// ============================================================
+
+@use '../variables' as *;
+// Charge csc-bubble pour autoriser `@extend .csc-bubble` à travers les modules.
+@use 'csc-bubble';
+
+// ===========================
+// BANDEAU TITRE PAGE — Style Instagram CSC (badges colorés)
+// Reproduit le pattern récurrent des posts @csc_ostwald :
+// fond doux beige + badge titre orange + badge sous-titre bleu.
+// ===========================
+.page-header {
+  position: relative;
+  // Fond beige doux (cohérent avec les programmes mensuels Instagram)
+  background:
+    radial-gradient(circle at 10% 0%, rgba($orange, 0.1), transparent 50%),
+    radial-gradient(circle at 90% 100%, rgba($green, 0.08), transparent 50%), #fdf6ee; // beige charte CSC
+  text-align: center;
+  // Top padding réduit : la bubble titre a déjà son propre padding visuel,
+  // pas besoin de 48px de marge beige supplémentaire entre la navbar et
+  // la bubble. $space-7 (28px) = respiration minimale + bubble bien visible.
+  padding: $space-7 $space-5 $space-10;
+  // Compense la navbar fixe (84px). Aucun gap entre la navbar et le bandeau.
+  margin-top: $navbar-height;
+  overflow: hidden;
+
+  // Décor "/// ///" en bas-droite (signature posts Instagram)
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: $space-4;
+    inset-inline-end: $space-6;
+    width: 60px;
+    height: 24px;
+    background-image:
+      linear-gradient(135deg, rgba($orange, 0.5) 33%, transparent 33%),
+      linear-gradient(135deg, rgba($orange, 0.5) 33%, transparent 33%),
+      linear-gradient(135deg, rgba($orange, 0.5) 33%, transparent 33%);
+    background-size: 12px 24px;
+    background-position:
+      0 0,
+      24px 0,
+      48px 0;
+    background-repeat: no-repeat;
+    opacity: 0.4;
+  }
+
+  // Si la page utilise un <h1.page-header__title> standard (compat),
+  // on lui applique automatiquement le style bubble orange.
+  h1 {
+    @extend .csc-bubble;
+    @extend .csc-bubble--orange;
+    @extend .csc-bubble--xl;
+    @extend .csc-bubble--tab-bottom;
+    @extend .csc-bubble--shadow;
+    margin: 0 auto;
+    max-width: 90%;
+  }
+
+  // Sub-title optionnel : bubble bleu sous le titre
+  p {
+    @extend .csc-bubble;
+    @extend .csc-bubble--blue;
+    @extend .csc-bubble--lg;
+    @extend .csc-bubble--shadow;
+    margin: $space-5 auto 0;
+    max-width: 60ch;
+  }
+}
+
+@media (max-width: $bp-md) {
+  .page-header {
+    padding: $space-7 $space-4;
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .page-header {
+    padding: $space-6 $space-4;
+  }
+}
+
+// ===========================
+// SECTION SPACING — Phase D (UI/UX Pro Max)
+// Padding fluide via clamp() : 32px (mobile) → 96px (desktop large).
+// Plus besoin de redéfinir le padding dans les media queries.
+// ===========================
+.section {
+  padding-block: clamp(#{$space-5}, 3vw, #{$space-12});
+}
+
+.section-alt {
+  padding-block: clamp(#{$space-5}, 3vw, #{$space-12});
+  background: $gray-50;
+}
+
+// Section compacte (entre deux sections principales)
+.section-tight {
+  padding-block: clamp(#{$space-4}, 2vw, #{$space-8});
+}
+
+// Section large (hero, sections décoratives)
+.section-large {
+  padding-block: clamp(#{$space-8}, 5vw, #{$space-20});
+}
+
+@media (max-width: $bp-md) {
+  .section-title {
+    font-size: $text-2xl;
+    margin-bottom: $space-4;
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .section-title {
+    font-size: $text-xl;
+    margin-bottom: $space-3;
+  }
+}

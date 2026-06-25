@@ -1,0 +1,46 @@
+// ============================================================
+// global.scss — Point d'entrée des styles globaux du CSC Ostwald
+//
+// Ce fichier ne contient AUCUNE règle CSS directe. Il sert uniquement
+// de manifeste qui charge les partials dans le bon ordre.
+//
+// Importé une seule fois dans main.tsx via :
+//   import '@styles/global.scss';
+//
+// ─── Ordre de chargement (CRITIQUE — ne pas modifier sans réfléchir) ─
+//   1. reset            → base sur les éléments natifs (html, body, a, ul, …)
+//   2. typography       → h1-h6, p, .text-*, polices Cairo (ar) + Fredoka
+//   3. accessibility    → focus-visible, skip-link, sr-only, .app-wrapper
+//   4. utilities        → .container, .stack, .section-title
+//   5. csc-bubble       → AVANT btn-bubble et layout-blocks (qui @extend)
+//   6. cards            → .card + .csc-card (compound component)
+//   7. forms            → .form-* + %form-control-base placeholder
+//   8. buttons          → .btn + variantes primary/secondary/outline/ghost
+//   9. btn-bubble       → CTA Instagram (extend .csc-bubble) + ripple
+//  10. layout-blocks    → .page-header (extend .csc-bubble) + .section
+//  11. motion           → keyframes + animations + reduced-motion override
+//  12. effects          → spotlight, cursor-glow, ambient bubbles, text-reveal
+//  13. page-loader      → loader Suspense (3 bubbles colorées)
+//  14. a11y-modes       → modes globaux (grayscale/high-contrast/negative)
+//                         doit venir APRÈS les composants pour pouvoir overrider
+//  15. print            → @media print (en dernier, pas de cascade contrainte)
+// ============================================================
+
+@use 'sass:color';
+@use 'variables' as *;
+
+@use 'global/reset';
+@use 'global/typography';
+@use 'global/accessibility';
+@use 'global/utilities';
+@use 'global/csc-bubble';
+@use 'global/cards';
+@use 'global/forms';
+@use 'global/buttons';
+@use 'global/btn-bubble';
+@use 'global/layout-blocks';
+@use 'global/motion';
+@use 'global/effects';
+@use 'global/page-loader';
+@use 'global/a11y-modes';
+@use 'global/print';

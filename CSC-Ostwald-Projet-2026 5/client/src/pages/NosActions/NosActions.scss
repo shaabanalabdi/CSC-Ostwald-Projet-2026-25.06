@@ -1,0 +1,203 @@
+@use 'variables' as *;
+
+// ===========================
+// HEADER VERT
+// ===========================
+.nosactions__header {
+  background: $green;
+  text-align: center;
+  padding: $space-6 $space-5;
+  margin-top: $navbar-height;
+
+  h1 {
+    color: $white;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    margin: 0;
+    text-transform: none;
+  }
+}
+
+// ===========================
+// WRAPPER
+// ===========================
+.nosactions__wrapper {
+  padding-top: calc(#{$navbar-height} + 40px);
+  padding-bottom: 80px;
+}
+
+.nosactions__intro {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: $bleu-dark;
+  margin-bottom: 40px;
+  max-width: 100%;
+}
+
+// ===========================
+// SECTIONS
+// ===========================
+.nosactions__section {
+  margin-bottom: 56px;
+}
+
+.nosactions__section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: $bleu;
+  margin-bottom: 28px;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 36px;
+    height: 3px;
+    background: $bleu;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+}
+
+// ===========================
+// PROGRAMME MENSUEL — 2 images côte à côte
+// ===========================
+.nosactions__programme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nosactions__programme-img {
+  border-radius: $radius-lg;
+  overflow: hidden;
+  border: 1px solid $gray-200;
+
+  img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.nosactions__programme-label {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $bleu;
+  padding: $space-2;
+  margin: 0;
+  background: $gray-50;
+}
+
+// ===========================
+// ATELIERS — grille 2x2
+// ===========================
+.ateliers__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px 32px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.atelier__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.atelier__img-wrapper {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid $gray-200;
+  flex-shrink: 0;
+
+  @media (max-width: 480px) {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+.atelier__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.atelier__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: $bleu;
+  margin: 0;
+}
+
+.atelier__horaire {
+  font-size: 0.9rem;
+  color: $bleu-dark;
+  margin: 0;
+}
+
+.atelier__jours {
+  font-size: 0.9rem;
+  color: $bleu-dark;
+  margin: 0;
+}
+
+.orange {
+  color: $orange-text;
+  font-weight: 700;
+}
+
+.bleu {
+  color: $bleu;
+  font-weight: 700;
+}
+
+// ===========================
+// CTA CONTACT
+// ===========================
+.nosactions__cta {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.nosactions__cta-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: $bleu-dark;
+  max-width: 600px;
+  margin: 0 auto 24px;
+}
+
+.nosactions__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: $orange;
+  color: $white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  border-radius: 10px;
+
+  &:hover {
+    background: $orange-dark;
+  }
+}

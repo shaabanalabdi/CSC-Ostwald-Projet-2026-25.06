@@ -1,0 +1,90 @@
+// ============================================================
+// _accessibility.scss — Helpers d'accessibilité (focus, skip-link, sr-only)
+// + structure de base .app-wrapper / main pour le flow flex column.
+// ============================================================
+
+@use '../variables' as *;
+
+// Focus visible — utilise un double anneau (orange brand + halo blanc en outset)
+// pour garantir un contraste ≥ 3:1 sur TOUT fond (clair, foncé, orange).
+// WCAG 1.4.11 Non-text Contrast — l'orange seul à #ee961b est 2.7:1 sur blanc, KO.
+:focus-visible {
+  outline: 3px solid $orange;
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 2px $white,
+    0 0 0 5px rgba($bleu-dark, 0.6);
+}
+
+// ===========================
+// SKIP-LINK (RGAA / WCAG 2.4.1)
+// Lien d'évitement visible uniquement au focus clavier
+// ===========================
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 9999;
+  background: $orange;
+  color: $white;
+  padding: 12px 24px;
+  border-radius: 0 0 $radius $radius;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: top 0.2s ease;
+
+  &:focus,
+  &:focus-visible {
+    top: 0;
+    outline: 3px solid $bleu;
+    outline-offset: 0;
+  }
+}
+
+// Évite que le focus visuel s'applique sur le wrapper #main-content
+// (qui a tabIndex="-1" uniquement pour pouvoir recevoir le focus via le skip-link)
+#main-content:focus {
+  outline: none;
+}
+
+// ===========================
+// SR-ONLY (accessibility helper)
+// Visible uniquement par les lecteurs d'écran, invisible visuellement.
+// Combine `clip` (legacy) + `clip-path` (moderne) pour couvrir tous les navigateurs.
+// ===========================
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Variante focusable : visible quand l'élément reçoit le focus clavier.
+// Utile pour les skip-links secondaires ou les labels de sections.
+.sr-only-focusable {
+  &:not(:focus):not(:focus-within) {
+    @extend .sr-only;
+  }
+}
+
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  // position: relative — requis par framer-motion useScroll (utilisé dans
+  // useParallax sur Hero). Sans cela, l'offset du scroll-target ne peut
+  // pas être calculé correctement, et la console affiche le warning :
+  // "Please ensure that the container has a non-static position".
+  position: relative;
+}

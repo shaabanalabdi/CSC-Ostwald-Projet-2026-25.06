@@ -1,0 +1,365 @@
+@use 'variables' as *;
+
+.hero {
+  position: relative;
+  height: 520px;
+  margin-top: $navbar-height; // compense la navbar fixe (72px)
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // ===========================
+  // FOND MÉDIA — image ou vidéo de la slide courante.
+  // Éditable depuis /admin/hero. Le dégradé orange `.hero::before`
+  // reste le repli quand le type est « none » ou si le média ne charge pas.
+  // ===========================
+  &__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: 0; // au-dessus du dégradé ::before, sous l'overlay (z-index 1)
+  }
+
+  // Fallback couleur si la vidéo ne charge pas
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, $orange-dark, $orange, $orange-light);
+    z-index: 0;
+  }
+
+  // ===========================
+  // OVERLAY
+  // ===========================
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba($orange-dark, 0.65) 0%,
+      rgba($bleu-dark, 0.5) 50%,
+      rgba($green, 0.35) 100%
+    );
+    z-index: 1;
+  }
+
+  // ===========================
+  // CONTENU
+  // ===========================
+  &__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 20px;
+    max-width: 800px;
+    transition: none;
+    animation: none;
+
+    &--hidden {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  // Conteneur des bubbles CSC (titre + sous-titre Instagram-style)
+  // Le styling principal vient de .csc-bubble — ici on ajuste seulement
+  // l'espace inférieur avant les boutons CTA.
+  &__bubbles {
+    margin-bottom: $space-8;
+    max-width: 90%;
+    margin-inline: auto;
+  }
+
+  // Surcharges du badge titre (réutilise .csc-bubble + ajustements hero)
+  &__title {
+    // Hauteur min pour stabiliser le layout sur changement de slide
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__subtitle {
+    // Largeur max pour éviter une bubble trop large sur grand écran
+    max-width: 60ch;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    border-radius: 5px !important;
+  }
+
+  // (l'ancien &__btn-outline a été retiré : les 2 CTA Hero utilisent
+  // maintenant .btn-bubble — voir Hero.jsx + global.scss.)
+
+  // ===========================
+  // DOTS — pill-active + touch ≥44 (WCAG 2.5.5)
+  // ===========================
+  &__dots {
+    position: absolute;
+    bottom: $space-5;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    z-index: 5;
+  }
+
+  // ===========================
+  // PAUSE BUTTON — WCAG 2.2.2 (Pause, Stop, Hide)
+  // Permet à l'utilisateur de figer le carrousel auto-avançant.
+  // Hit area conforme WCAG 2.5.5 (44×44pt) — pill blanc/orange.
+  // ===========================
+  &__pause {
+    width: 44px;
+    height: 44px;
+    margin-inline-start: $space-2;
+    padding: 0;
+    border: 2px solid rgba($white, 0.7);
+    background: rgba(0, 0, 0, 0.35);
+    color: $white;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    transition: $transition-colors, $transition-transform;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      border-color: $white;
+      background: rgba(0, 0, 0, 0.55);
+      transform: scale(1.05);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $orange;
+      outline-offset: 3px;
+    }
+
+    &[aria-pressed='true'] {
+      background: $orange;
+      border-color: $white;
+    }
+  }
+
+  // Indicateur « scroll vers le bas » — petit cadre vertical + dot qui descend.
+  // Inspiration : Apple, Stripe, sites premium. Évite le « plat » visuel après
+  // le hero. Disparaît au scroll via opacity (basic, non-JS).
+  &__scroll-hint {
+    position: absolute;
+    bottom: $space-8;
+    inset-inline-end: $space-8;
+    width: 26px;
+    height: 42px;
+    border: 2px solid rgba($white, 0.5);
+    border-radius: $radius-pill;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+    transition:
+      opacity 0.3s ease,
+      border-color 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+
+    // Masque automatiquement quand l'utilisateur a scrollé un peu
+    // (animate-on-scroll via :focus est trop limité — on garde simple)
+    &:hover {
+      border-color: $white;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $white;
+      outline-offset: 4px;
+    }
+
+    &-dot {
+      width: 4px;
+      height: 8px;
+      background: $white;
+      border-radius: $radius-pill;
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__scroll-hint-dot {
+      animation: none;
+    }
+  }
+
+  // Cache l'indicateur sur très petits écrans (priorité au contenu)
+  @media (max-width: 480px) {
+    &__scroll-hint {
+      bottom: $space-6;
+      inset-inline-end: $space-4;
+      width: 22px;
+      height: 36px;
+    }
+  }
+}
+
+@keyframes heroScrollDot {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(14px);
+    opacity: 0.3;
+  }
+}
+
+.hero {
+  // Bouton entier : 44×44 invisible (hit area conforme WCAG)
+  // Visuel (`__dot-visual`) à l'intérieur : petit, élégant.
+  &__dot {
+    // ↑ Hit area conforme WCAG 2.5.5 AAA (44×44pt min)
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: $transition-fast;
+
+    // Visuel intérieur
+    &::before {
+      content: '';
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-radius: $radius-pill;
+      background: rgba($white, 0.5);
+      box-shadow: 0 0 0 2px rgba($white, 0.8);
+      transition:
+        width $transition-base $ease-out,
+        background $transition-base $ease-out;
+    }
+
+    &--active::before {
+      // Active : pill élongée (28×10) en orange — design moderne (style Apple/Material)
+      width: 28px;
+      background: $orange;
+      box-shadow:
+        0 0 0 2px $white,
+        0 2px 8px rgba($orange, 0.5);
+    }
+
+    &:hover:not(&--active)::before {
+      background: rgba($white, 0.85);
+      width: 14px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $orange;
+      outline-offset: 2px;
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ===========================
+// RESPONSIVE
+// ===========================
+@media (max-width: 768px) {
+  .hero {
+    height: 380px;
+
+    &__dots {
+      bottom: $space-3;
+      gap: $space-1;
+    }
+
+    // Hit area reste 44×44 sur mobile (touch target AAA), visuel un peu plus petit
+    &__dot::before {
+      width: 8px;
+      height: 8px;
+    }
+
+    &__dot--active::before {
+      width: 22px;
+    }
+
+    &__content {
+      padding: 0 $space-4;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 300px;
+
+    &__actions {
+      gap: 10px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    // Sécurité : sur mobile, .csc-bubble--xl doit rester dans le viewport
+    // et le texte doit pouvoir wrap au lieu de déborder horizontalement.
+    &__title.csc-bubble {
+      max-width: 92vw;
+      white-space: normal;
+      text-wrap: balance;
+      font-size: clamp(1.3rem, 6.5vw, 1.8rem);
+      padding: 14px 22px;
+    }
+
+    &__subtitle.csc-bubble {
+      max-width: 92vw;
+      white-space: normal;
+      text-wrap: balance;
+      font-size: clamp(0.95rem, 4.5vw, 1.2rem);
+      padding: 10px 18px;
+    }
+  }
+}
+
+@media (max-width: 380px) {
+  .hero {
+    height: 280px;
+
+    &__content {
+      padding: 0 12px;
+    }
+
+    &__actions {
+      gap: 8px;
+    }
+  }
+}

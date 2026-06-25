@@ -1,0 +1,64 @@
+// ============================================================
+// _reset.scss — Reset CSS et styles de base sur les éléments natifs
+// ============================================================
+
+@use '../variables' as *;
+
+// ===========================
+// RESET & BASE
+// ===========================
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  // scroll-padding-top : compense la navbar fixe (72px) lors du scroll vers
+  // une ancre (#agenda, #benevole, #contact). Sans ça, le titre de la section
+  // ciblée se retrouve CACHÉ sous la navbar — bug UX classique.
+  // +16px de marge pour respirer visuellement après le snap.
+  scroll-padding-top: calc(#{$navbar-height} + #{$space-4});
+}
+
+body {
+  font-family:
+    'Outfit',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: $bleu-dark;
+  background: $white;
+  // Body : line-height 1.6 (readability sweet spot 1.5–1.75 selon WCAG)
+  line-height: $leading-relaxed;
+  font-size: $text-base; // 16px : évite l'auto-zoom iOS
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}

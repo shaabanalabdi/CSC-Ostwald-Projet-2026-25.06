@@ -1,0 +1,134 @@
+@use 'variables' as *;
+
+.not-found {
+  min-height: calc(100vh - #{$navbar-height});
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $navbar-height $space-5 $space-12;
+  background: $white;
+  overflow: hidden;
+
+  // Le contenu doit passer au-dessus de l'atmosphère injectée (mesh + bubbles + grain)
+  &__inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-6;
+    text-align: center;
+    max-width: 560px;
+  }
+
+  // Les « 404 » en typographie géante : accent visuel principal, signature ludique.
+  // Chaque chiffre a une couleur charte différente + léger tilt = vibe Instagram CSC.
+  &__digits {
+    display: inline-flex;
+    align-items: baseline;
+    gap: $space-3;
+    font-family: 'Fredoka', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(5rem, 18vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+
+    > span {
+      display: inline-block;
+      transition: transform 0.4s $ease-spring;
+
+      &:nth-child(1) {
+        color: $orange;
+        transform: rotate(-4deg);
+      }
+      &:nth-child(2) {
+        color: $bleu;
+        transform: rotate(2deg);
+      }
+      &:nth-child(3) {
+        color: $green;
+        transform: rotate(-3deg);
+      }
+    }
+
+    // Hover sur tout le bloc : les chiffres se redressent → micro-récompense ludique
+    &:hover > span {
+      transform: rotate(0);
+    }
+  }
+
+  // Titre en bubble — petit margin pour respirer après les 404 géants
+  &__title {
+    margin: 0;
+  }
+
+  &__text {
+    font-size: $text-lg;
+    line-height: $leading-relaxed;
+    color: $text-muted;
+    max-width: 48ch;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  // CTA retour : gap entre icône home, texte, et chevron
+  &__btn {
+    gap: $space-3;
+  }
+
+  // Raccourcis (Famille / Jeunesse / Contact) — secondaires au CTA principal
+  &__shortcuts {
+    margin-top: $space-4;
+    text-align: center;
+  }
+
+  &__shortcuts-label {
+    margin: 0 0 $space-3;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__shortcuts-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $space-3;
+
+    li a {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: $radius-xl;
+      background: rgba(1, 50, 204, 0.06);
+      color: $bleu;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: $text-sm;
+      transition: $transition-colors;
+
+      &:hover,
+      &:focus-visible {
+        background: $bleu;
+        color: $white;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__inner {
+      gap: $space-5;
+    }
+  }
+
+  // Reduced motion : pas de rotation des chiffres
+  @media (prefers-reduced-motion: reduce) {
+    &__digits > span {
+      transform: none;
+    }
+  }
+}

@@ -1,0 +1,279 @@
+@use 'variables' as *;
+
+// ===========================================================
+// AdminHero — liste des slides du carrousel Hero (glisser-déposer).
+// Calquée sur AdminPartners ; pas de filtre ni de pagination car le
+// Hero ne contient qu'une poignée de slides.
+// ===========================================================
+.admin-hero {
+  min-height: 100vh;
+  background: $gray-50;
+  padding: $space-8 $space-6;
+
+  &__header {
+    max-width: 900px;
+    margin: 0 auto $space-4 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $space-4;
+    flex-wrap: wrap;
+  }
+
+  &__back {
+    display: inline-block;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-decoration: none;
+    margin-bottom: $space-2;
+
+    &:hover {
+      color: $bleu;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-size: $text-3xl;
+    color: $bleu-dark;
+    display: flex;
+    align-items: baseline;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+
+  &__count {
+    font-size: $text-sm;
+    color: $gray-500;
+    font-weight: $font-normal;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+  }
+
+  &__cta {
+    padding: $space-2 $space-4;
+    background: $orange;
+    color: $white;
+    border: 1px solid $orange;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    font-weight: $font-semibold;
+    text-decoration: none;
+    transition: $transition-colors;
+
+    &:hover {
+      background: $orange-dark;
+      border-color: $orange-dark;
+    }
+  }
+
+  &__btn {
+    padding: $space-2 $space-4;
+    background: transparent;
+    color: $bleu;
+    border: 1px solid $bleu;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    cursor: pointer;
+    transition: $transition-colors;
+
+    &:hover:not(:disabled) {
+      background: $bleu;
+      color: $white;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__hint {
+    max-width: 900px;
+    margin: 0 auto $space-6 auto;
+    font-size: $text-sm;
+    color: $gray-600;
+    line-height: $leading-relaxed;
+  }
+
+  &__state {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: $space-6;
+    text-align: center;
+    color: $gray-700;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-1;
+
+    &--error {
+      color: $error-dark;
+      background: $error-bg;
+      border: 1px solid $error-light;
+    }
+  }
+
+  &__list {
+    max-width: 900px;
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+
+  // SortableItem rend la poignée `.sortable-handle` comme 1er enfant en
+  // flux : la carte est donc une rangée [poignée][corps][actions].
+  &__card {
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-1;
+    padding: $space-4 $space-5;
+    border-left: 3px solid $orange;
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    transition: box-shadow $transition-base $ease-out;
+
+    &:hover {
+      box-shadow: $elevation-2;
+    }
+
+    // Brouillon : liséré neutre + fond légèrement grisé.
+    &--draft {
+      border-left-color: $gray-300;
+      background: $gray-50;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__card-meta {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin-bottom: $space-1;
+  }
+
+  &__position {
+    font-size: $text-xs;
+    font-weight: $font-semibold;
+    text-transform: uppercase;
+    letter-spacing: $tracking-wide;
+    color: $bleu;
+  }
+
+  &__draft {
+    font-size: $text-xs;
+    font-weight: $font-semibold;
+    text-transform: uppercase;
+    letter-spacing: $tracking-wide;
+    padding: 2px $space-2;
+    border-radius: $radius-pill;
+    background: $warning-bg;
+    color: $warning-dark;
+  }
+
+  // Pastille « Image » / « Vidéo » — signale le fond de la slide.
+  &__media-tag {
+    font-size: $text-xs;
+    font-weight: $font-semibold;
+    text-transform: uppercase;
+    letter-spacing: $tracking-wide;
+    padding: 2px $space-2;
+    border-radius: $radius-pill;
+    background: rgba($bleu, 0.1);
+    color: $bleu;
+
+    &--video {
+      background: rgba($sector-jeunesse, 0.12);
+      color: $sector-jeunesse-text;
+    }
+  }
+
+  &__name {
+    margin: 0 0 $space-1 0;
+    font-size: $text-lg;
+    color: $bleu-dark;
+    line-height: $leading-snug;
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: $text-sm;
+    color: $gray-600;
+    line-height: $leading-snug;
+  }
+
+  &__card-actions {
+    display: flex;
+    gap: $space-2;
+    flex-shrink: 0;
+  }
+
+  &__action {
+    padding: $space-2 $space-4;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    font-weight: $font-medium;
+    cursor: pointer;
+    transition: $transition-colors;
+    border: 1px solid transparent;
+    text-decoration: none;
+    display: inline-block;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &--edit {
+      background: $bleu;
+      color: $white;
+      border-color: $bleu;
+
+      &:hover {
+        background: color-mix(in srgb, $bleu 88%, black);
+      }
+    }
+
+    &--delete {
+      background: transparent;
+      color: $error-dark;
+      border-color: $error-light;
+
+      &:hover:not(:disabled) {
+        background: $error;
+        color: $white;
+        border-color: $error;
+      }
+    }
+  }
+
+  // ── Mobile : la carte passe en colonne, les actions en pleine largeur.
+  @media (max-width: 640px) {
+    padding: $space-6 $space-4;
+
+    &__card {
+      flex-wrap: wrap;
+    }
+
+    &__card-actions {
+      width: 100%;
+
+      a,
+      button {
+        flex: 1;
+        text-align: center;
+      }
+    }
+  }
+}

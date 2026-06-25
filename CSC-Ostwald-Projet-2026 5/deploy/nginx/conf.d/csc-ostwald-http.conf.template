@@ -1,0 +1,28 @@
+# =====================================================================
+# csc-ostwald-http.conf — Bootstrap HTTP-only config.
+#
+# Used ONLY for the first Let's Encrypt cert issuance (chicken-and-egg
+# problem: nginx needs the cert to start in HTTPS mode, certbot needs
+# nginx to serve the ACME challenge file). After the cert lands in
+# certbot/conf, init-letsencrypt.sh swaps this file for the real
+# csc-ostwald.conf and reloads nginx.
+#
+# `__DOMAIN__` is replaced at init time with the real domain.
+# =====================================================================
+
+server {
+  listen 80;
+  listen [::]:80;
+  server_name __DOMAIN__ www.__DOMAIN__;
+
+  # ACME HTTP-01 challenge — certbot writes proof files here.
+  location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+  }
+
+  # Everything else gets a placeholder while we wait for the cert.
+  location / {
+    return 200 'CSC Ostwald — Setting up SSL...';
+    add_header Content-Type text/plain;
+  }
+}

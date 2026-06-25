@@ -1,0 +1,294 @@
+@use 'variables' as *;
+
+.admin-registrations {
+  min-height: 100vh;
+  background: $gray-50;
+  padding: $space-8 $space-6;
+
+  &__header {
+    max-width: 1200px;
+    margin: 0 auto $space-6 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $space-4;
+    flex-wrap: wrap;
+  }
+
+  &__back {
+    display: inline-block;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-decoration: none;
+    margin-bottom: $space-2;
+
+    &:hover {
+      color: $bleu;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-size: $text-3xl;
+    color: $bleu-dark;
+    display: flex;
+    align-items: baseline;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+
+  &__count {
+    font-size: $text-sm;
+    color: $gray-500;
+    font-weight: $font-normal;
+  }
+
+  &__actions-header {
+    display: flex;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    padding: $space-2 $space-4;
+    background: transparent;
+    color: $bleu;
+    border: 1px solid $bleu;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    cursor: pointer;
+    transition: $transition-colors;
+
+    &:hover:not(:disabled) {
+      background: $bleu;
+      color: $white;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__state {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: $space-6;
+    text-align: center;
+    color: $gray-700;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-1;
+
+    &--error {
+      color: $error-dark;
+      background: $error-bg;
+      border: 1px solid $error-light;
+    }
+  }
+
+  &__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  &__table-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-x: auto;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-1;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: $text-sm;
+
+    thead {
+      background: $gray-50;
+    }
+
+    th,
+    td {
+      padding: $space-3 $space-4;
+      text-align: left;
+      border-bottom: 1px solid $gray-200;
+      vertical-align: middle;
+    }
+
+    th {
+      font-weight: $font-semibold;
+      color: $gray-700;
+      font-size: $text-xs;
+      text-transform: uppercase;
+      letter-spacing: $tracking-wide;
+    }
+
+    tbody tr {
+      transition: background $transition-base $ease-out;
+
+      &:hover {
+        background: $gray-50;
+      }
+    }
+
+    a {
+      color: $bleu;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__th-actions {
+    text-align: right;
+  }
+
+  &__row {
+    &--paid {
+      border-left: 3px solid $green;
+    }
+    &--pending {
+      border-left: 3px solid $orange;
+    }
+    &--refunded {
+      border-left: 3px solid $gray-400;
+      opacity: 0.7;
+    }
+  }
+
+  &__person {
+    font-weight: $font-semibold;
+    color: $bleu-dark;
+  }
+
+  &__email {
+    font-size: $text-xs;
+    color: $gray-600;
+  }
+
+  &__deleted {
+    color: $gray-500;
+    font-style: italic;
+  }
+
+  &__amount {
+    font-weight: $font-semibold;
+    color: $bleu-dark;
+  }
+
+  &__status {
+    padding: $space-1 $space-3;
+    border-radius: $radius-pill;
+    font-size: $text-xs;
+    font-weight: $font-semibold;
+    text-transform: uppercase;
+    letter-spacing: $tracking-wide;
+    border: 1px solid currentColor;
+    background: transparent;
+    cursor: pointer;
+    transition: $transition-colors;
+
+    &--paid {
+      color: $green-text;
+      background: rgba($green, 0.08);
+    }
+    &--pending {
+      color: $orange-text;
+      background: rgba($orange, 0.08);
+    }
+    &--refunded {
+      color: $gray-600;
+      background: $gray-100;
+    }
+  }
+
+  &__date {
+    color: $gray-700;
+    white-space: nowrap;
+  }
+
+  &__transaction {
+    code {
+      font-size: $text-xs;
+      color: $gray-600;
+      background: $gray-100;
+      padding: $space-1 $space-2;
+      border-radius: $radius-sm;
+    }
+
+    em {
+      color: $gray-400;
+    }
+  }
+
+  &__delete {
+    padding: $space-1 $space-3;
+    background: transparent;
+    color: $error-dark;
+    border: 1px solid $error-light;
+    border-radius: $radius-sm;
+    font-size: $text-xs;
+    cursor: pointer;
+    transition: $transition-colors;
+    float: right;
+
+    &:hover:not(:disabled) {
+      background: $error;
+      color: $white;
+      border-color: $error;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__pagination {
+    max-width: 1200px;
+    margin: $space-6 auto 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-4;
+  }
+
+  &__page-btn {
+    padding: $space-2 $space-4;
+    background: $white;
+    color: $bleu;
+    border: 1px solid $gray-300;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    cursor: pointer;
+    transition: $transition-colors;
+
+    &:hover:not(:disabled) {
+      background: $bleu;
+      color: $white;
+      border-color: $bleu;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__page-label {
+    font-size: $text-sm;
+    color: $gray-700;
+  }
+}

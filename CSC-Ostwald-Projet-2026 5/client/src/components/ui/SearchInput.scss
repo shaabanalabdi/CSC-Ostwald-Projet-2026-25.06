@@ -1,0 +1,57 @@
+@use 'variables' as *;
+
+.search-input {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+
+  &__icon {
+    position: absolute;
+    inset-inline-start: 12px;
+    color: $text-muted;
+    pointer-events: none;
+    font-size: 0.95rem;
+  }
+
+  &__field {
+    flex: 1;
+    width: 100%;
+    padding: 8px 38px 8px 36px; // room for the leading icon + clear button
+    border-radius: $radius-xl;
+    border: 1px solid $gray-300;
+    font-size: 0.88rem;
+    background: $white;
+    transition: $transition-colors;
+
+    &:focus {
+      outline: none;
+      border-color: $bleu;
+      box-shadow: 0 0 0 3px rgba($bleu, 0.12);
+    }
+
+    &::placeholder {
+      color: $text-muted;
+    }
+  }
+
+  &__clear {
+    position: absolute;
+    inset-inline-end: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: $text-muted;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 50%;
+
+    &:hover {
+      color: $bleu;
+      background: rgba($bleu, 0.08);
+    }
+  }
+}

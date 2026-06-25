@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ee961b" />
+    <title>Centre Social et Culturel d'Ostwald</title>
+    <meta
+      name="description"
+      content="Le Centre Social et Culturel d'Ostwald : activités, événements et services pour tous les habitants."
+    />
+    <meta property="og:title" content="Centre Social et Culturel d'Ostwald" />
+    <meta property="og:description" content="Activités, événements et projets au cœur d'Ostwald." />
+    <meta property="og:type" content="website" />
+    <!-- Critical fonts: preloaded BEFORE the JS bundle so the latin
+         subsets of Outfit + Fredoka are available at first paint and
+         don't cause a layout shift when they swap in. Hrefs must match
+         the @font-face urls in /fonts/critical.css. -->
+    <link
+      rel="preload"
+      href="/fonts/open-sans-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/open-sans-latin-600-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/fonts/critical.css" />
+    <!-- The remaining weights + non-latin subsets are bundled via
+         @fontsource imports in main.tsx (font-display: swap is fine
+         for minority chars / locales). -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,297 @@
+// ============================================================
+// _cards.scss — Système .card de base + variantes catégories
+// + .csc-card (compound component aligné avec CSCCard.tsx)
+// ============================================================
+
+@use '../variables' as *;
+// Charge typography pour autoriser `@extend .text-overline` (card__overline).
+@use 'typography';
+
+// ===========================
+// CARD SYSTEM — Phase C2 (UI/UX Pro Max)
+// .card = container réutilisable | sub-éléments BEM : __image, __body, __title, __meta
+// Variantes : --elevated (shadow), --interactive (hover lift), --bordered, --flat
+// ===========================
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: $white;
+  border-radius: $radius-lg2;
+  overflow: hidden;
+  transition: $transition-transform, $transition-shadow;
+
+  // Variantes par modificateurs BEM
+  &--elevated {
+    box-shadow: $elevation-2;
+  }
+
+  &--bordered {
+    border: 1px solid $gray-200;
+  }
+
+  &--flat {
+    background: $gray-50;
+  }
+
+  // Interactive : hover lift + shadow growth (cards cliquables/liens)
+  &--interactive {
+    cursor: pointer;
+    box-shadow: $elevation-2;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: $elevation-4;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: $ring-orange, $elevation-3;
+    }
+  }
+
+  // Sub-éléments BEM
+  &__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: $gray-100;
+    // aspect-ratio évite le CLS (Cumulative Layout Shift) avant chargement
+    aspect-ratio: 16 / 10;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $transition-slow $ease-out;
+  }
+
+  // Zoom de l'image quand la card est hover
+  &--interactive:hover &__image {
+    transform: scale(1.05);
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    padding: $space-5;
+  }
+
+  &__overline {
+    @extend .text-overline;
+  }
+
+  &__title {
+    font-size: $text-lg;
+    font-weight: $font-bold;
+    line-height: $leading-snug;
+    color: $bleu-dark;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  &__description {
+    font-size: $text-sm;
+    line-height: $leading-relaxed;
+    color: $gray-600;
+    margin: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3;
+    margin-top: auto;
+    padding-top: $space-2;
+    font-size: $text-xs;
+    color: $gray-500;
+
+    > * {
+      display: inline-flex;
+      align-items: center;
+      gap: $space-1;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $space-3 $space-5;
+    border-top: 1px solid $gray-100;
+    background: $gray-50;
+  }
+
+  // Badge positionné en haut de la card (catégorie, statut, etc.)
+  &__badge {
+    position: absolute;
+    top: $space-3;
+    inset-inline-start: $space-3; // RTL-safe
+    z-index: $z-base;
+    padding: $space-1 $space-3;
+    background: $orange;
+    color: $white;
+    font-size: $text-xs;
+    font-weight: $font-bold;
+    letter-spacing: $tracking-wide;
+    text-transform: uppercase;
+    border-radius: $radius-pill;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Card categories (utilisable comme .card--famille, .card--jeunesse...)
+// Reflet de la charte CSC : code couleur par axe.
+.card--famille {
+  border-top: 3px solid $sector-famille;
+}
+.card--jeunesse {
+  border-top: 3px solid $sector-jeunesse;
+}
+.card--reguliere {
+  border-top: 3px solid $sector-reguliere;
+}
+.card--environnement {
+  border-top: 3px solid $sector-environnement;
+}
+
+// ===========================
+// CSC-CARD — Compound component (Instagram CSC unifié)
+// Voir CSCCard.tsx pour les sous-composants composables.
+// Différent de .card : intégration native avec .csc-bubble overlays,
+// support du tilt 3D (21st.dev style), et hooks framer-motion ready.
+// ===========================
+.csc-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: $white;
+  border-radius: $radius-lg2;
+  overflow: hidden;
+  transition:
+    transform $transition-slow $ease-out,
+    box-shadow $transition-slow $ease-out;
+  // transform-style preserve-3d nécessaire pour tilt 3D (children "flottent")
+  transform-style: preserve-3d;
+
+  &--elevated {
+    box-shadow: $elevation-2;
+  }
+
+  &--bordered {
+    border: 1px solid $gray-200;
+  }
+
+  &--flat {
+    background: $gray-50;
+  }
+
+  // Hover lift (cards interactives)
+  &--interactive {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: $elevation-4;
+    }
+
+    // Si pas en mode tilt3D, on applique un translateY classique au hover
+    &:not(.csc-card--tilt-enabled):hover {
+      transform: translateY(-6px);
+    }
+  }
+
+  // Tilt 3D : désactivé sur appareils tactiles (pas de hover précis)
+  @media (hover: none) {
+    &--tilt-enabled {
+      transform: none !important;
+    }
+  }
+
+  // ─── Sous-éléments ──────────────────────────────────────────────
+  &__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: $gray-100;
+    aspect-ratio: 16 / 10;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $transition-slow $ease-out;
+  }
+
+  &--interactive:hover &__image {
+    transform: scale(1.05);
+  }
+
+  // Badges en overlay (style Instagram CSC) — 2 positions standard
+  &__badge {
+    position: absolute;
+    z-index: 2;
+
+    &--top-start {
+      top: $space-3;
+      inset-inline-start: $space-3;
+    }
+
+    &--bottom-end {
+      bottom: $space-3;
+      inset-inline-end: $space-3;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    padding: $space-5;
+  }
+
+  &__title {
+    font-size: $text-lg;
+    font-weight: $font-bold;
+    line-height: $leading-snug;
+    color: $bleu-dark;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  &__description {
+    font-size: $text-sm;
+    line-height: $leading-relaxed;
+    color: $gray-600;
+    margin: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: $text-xs;
+    color: $gray-500;
+
+    > li {
+      display: inline-flex;
+      align-items: center;
+      gap: $space-1;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+    margin-top: auto;
+    padding-top: $space-2;
+  }
+}

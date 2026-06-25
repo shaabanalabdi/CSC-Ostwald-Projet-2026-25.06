@@ -1,0 +1,268 @@
+@use 'variables' as *;
+
+.admin-team {
+  min-height: 100vh;
+  background: $gray-50;
+  padding: $space-8 $space-6;
+
+  &__header {
+    max-width: 1100px;
+    margin: 0 auto $space-6 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $space-4;
+    flex-wrap: wrap;
+  }
+
+  &__back {
+    display: inline-block;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-decoration: none;
+    margin-bottom: $space-2;
+
+    &:hover {
+      color: $bleu;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-size: $text-3xl;
+    color: $bleu-dark;
+    display: flex;
+    align-items: baseline;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+
+  &__count {
+    font-size: $text-sm;
+    color: $gray-500;
+    font-weight: $font-normal;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+  }
+
+  &__cta {
+    padding: $space-2 $space-4;
+    background: $bleu;
+    color: $white;
+    border: 1px solid $bleu;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    font-weight: $font-semibold;
+    text-decoration: none;
+    transition: $transition-colors;
+
+    &:hover {
+      background: color-mix(in srgb, $bleu 88%, black);
+    }
+  }
+
+  &__btn {
+    padding: $space-2 $space-4;
+    background: transparent;
+    color: $bleu;
+    border: 1px solid $bleu;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    cursor: pointer;
+    transition: $transition-colors;
+
+    &:hover:not(:disabled) {
+      background: $bleu;
+      color: $white;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__state {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: $space-6;
+    text-align: center;
+    color: $gray-700;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-1;
+
+    &--error {
+      color: $error-dark;
+      background: $error-bg;
+      border: 1px solid $error-light;
+    }
+  }
+
+  &__list {
+    max-width: 1100px;
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: $space-4;
+  }
+
+  &__card {
+    position: relative;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-1;
+    padding: $space-5;
+    border-left: 3px solid $bleu;
+    transition: box-shadow $transition-base $ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+
+    &:hover {
+      box-shadow: $elevation-2;
+    }
+  }
+
+  &__avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba($bleu, 0.1);
+    color: $bleu;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  &__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__initials {
+    font-size: $text-xl;
+    font-weight: $font-bold;
+    letter-spacing: $tracking-wide;
+  }
+
+  &__body {
+    flex: 1;
+  }
+
+  &__name {
+    margin: 0 0 $space-1 0;
+    font-size: $text-lg;
+    color: $bleu-dark;
+    line-height: $leading-snug;
+  }
+
+  &__role {
+    margin: 0 0 $space-3 0;
+    font-size: $text-sm;
+    color: $orange-text;
+    font-weight: $font-semibold;
+  }
+
+  &__email,
+  &__order {
+    margin: 0 0 $space-1 0;
+    font-size: $text-sm;
+    color: $gray-700;
+
+    span {
+      color: $gray-500;
+      margin-right: $space-2;
+    }
+  }
+
+  &__card-actions {
+    display: flex;
+    gap: $space-2;
+    margin-top: auto;
+  }
+
+  &__action {
+    padding: $space-2 $space-4;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    font-weight: $font-medium;
+    cursor: pointer;
+    transition: $transition-colors;
+    border: 1px solid transparent;
+    text-decoration: none;
+    display: inline-block;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &--edit {
+      background: $bleu;
+      color: $white;
+      border-color: $bleu;
+
+      &:hover {
+        background: color-mix(in srgb, $bleu 88%, black);
+      }
+    }
+
+    &--delete {
+      background: transparent;
+      color: $error-dark;
+      border-color: $error-light;
+
+      &:hover:not(:disabled) {
+        background: $error;
+        color: $white;
+        border-color: $error;
+      }
+    }
+  }
+
+  &__pagination {
+    max-width: 1100px;
+    margin: $space-6 auto 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-4;
+  }
+
+  &__page-btn {
+    padding: $space-2 $space-4;
+    background: $white;
+    color: $bleu;
+    border: 1px solid $gray-300;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    cursor: pointer;
+    transition: $transition-colors;
+
+    &:hover:not(:disabled) {
+      background: $bleu;
+      color: $white;
+      border-color: $bleu;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__page-label {
+    font-size: $text-sm;
+    color: $gray-700;
+  }
+}

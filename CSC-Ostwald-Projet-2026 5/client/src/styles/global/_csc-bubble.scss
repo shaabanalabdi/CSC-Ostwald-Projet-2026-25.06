@@ -1,0 +1,149 @@
+// ============================================================
+// _csc-bubble.scss — Système .csc-bubble (badges colorés Instagram CSC)
+//
+// Reproduit fidèlement les "badges colorés avec petit tab" qui sont la
+// signature visuelle du CSC sur les réseaux sociaux.
+//
+// Structure : <span class="csc-bubble csc-bubble--orange">TITRE</span>
+//
+// Variantes :
+//   --orange (titre principal) | --blue (sous-titre)
+//   --green (date/heure)       | --pink (info spéciale)
+//   --yellow (Café des parents)
+//
+// Tailles :
+//   --sm (date/heure)  | (default = md)
+//   --lg (sous-titre)  | --xl (titre principal hero)
+//
+// Le "tab" en bas (signature CSC) :
+//   --tab-bottom (par défaut sur titres)
+//   --tab-top    (sur sous-titres alignés sous le titre)
+//   --no-tab     (pour usages sans signature visuelle)
+//
+// Ce partial DOIT être chargé AVANT _btn-bubble.scss et _layout-blocks.scss,
+// qui l'étendent via @extend .csc-bubble.
+// ============================================================
+
+@use '../variables' as *;
+
+.csc-bubble {
+  display: inline-block;
+  position: relative;
+  background: transparent;
+  color: $orange-dark;
+  padding: 4px 0;
+  border-radius: 0;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  box-shadow: none;
+
+  // ─── VARIANTES DE COULEUR ───────────────────────────────────────
+  // Les fonds doivent passer WCAG AA pour Large text (ratio ≥ 3.0) avec
+  // le texte blanc. Le orange/vert de la charte (#ee961b / #58b30d)
+  // tombent à 2.71 / 2.45 — on utilise donc les déclinaisons foncées
+  // ($orange-dark / $green-text) qui restent dans l'univers chromatique
+  // CSC tout en passant le contraste. Le brand orange/vert reste
+  // disponible dans `$orange` / `$green` pour les décorations (fonds
+  // sans texte par-dessus : SectionWave, GradientMesh, dots, etc.).
+  &--orange {
+    background: transparent;
+    color: $orange-dark;
+  }
+
+  &--blue {
+    background: transparent;
+    color: $bleu;
+  }
+
+  &--green {
+    background: transparent;
+    color: $green-text;
+  }
+
+  &--pink {
+    background: transparent;
+    color: #c83a55;
+  }
+
+  &--yellow {
+    background: transparent;
+    color: #a07800;
+  }
+
+  // ─── TAILLES ────────────────────────────────────────────────────
+  &--sm {
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    border-radius: 22px;
+    letter-spacing: 1px;
+  }
+
+  // Default = no modifier (md)
+
+  &--lg {
+    padding: 16px 30px;
+    font-size: 1.75rem;
+    border-radius: 32px;
+    letter-spacing: 1.8px;
+  }
+
+  &--xl {
+    padding: 20px 36px;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    border-radius: 36px;
+    letter-spacing: 2px;
+    font-weight: 700; // poids légèrement plus fort en XL
+  }
+
+  &::after {
+    display: none !important;
+  }
+
+  &--tab-bottom::after {
+    display: none !important;
+  }
+
+  &--tab-top::after {
+    display: none !important;
+  }
+
+  // ─── ROTATION LUDIQUE (optionnelle, comme dans certains posts) ──
+  &--tilt-left {
+    transform: rotate(-3deg);
+  }
+  &--tilt-right {
+    transform: rotate(3deg);
+  }
+
+  &--shadow {
+    box-shadow: none;
+  }
+}
+
+// ─── CONTAINER pour empiler plusieurs bubbles (style Instagram) ─
+// Usage : <div class="csc-bubble-stack">
+//           <span class="csc-bubble csc-bubble--orange csc-bubble--xl">...</span>
+//           <span class="csc-bubble csc-bubble--blue">...</span>
+//           <span class="csc-bubble csc-bubble--green csc-bubble--sm">...</span>
+//         </div>
+.csc-bubble-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  text-align: center;
+
+  &--start {
+    align-items: flex-start;
+  }
+  &--end {
+    align-items: flex-end;
+  }
+}

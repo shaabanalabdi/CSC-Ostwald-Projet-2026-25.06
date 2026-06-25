@@ -1,0 +1,83 @@
+@use 'variables' as *;
+
+// ============================================================
+// MARQUEE — Bande défilante horizontale infinie
+// Animation pure CSS (transform: translateX) — pas de JS dans la boucle.
+// Le contenu est dupliqué 2× dans le JSX pour créer la boucle visuelle.
+// ============================================================
+.marquee {
+  position: relative;
+  overflow: hidden;
+  // Fade sur les bords (effet "fondu" pour adoucir l'entrée/sortie des éléments)
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 60px,
+    #000 calc(100% - 60px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 60px,
+    #000 calc(100% - 60px),
+    transparent 100%
+  );
+
+  &__track {
+    display: flex;
+    width: max-content;
+    gap: var(--marquee-gap, 48px);
+    animation: marqueeScroll var(--marquee-duration, 30s) linear infinite;
+  }
+
+  &__group {
+    display: flex;
+    align-items: center;
+    gap: var(--marquee-gap, 48px);
+    flex-shrink: 0;
+  }
+
+  // Direction droite : inverse l'animation
+  &--right .marquee__track {
+    animation-direction: reverse;
+  }
+
+  // Pause au survol (UX accessibility : permet de cliquer/lire)
+  &--pause-hover:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  // Mode static (prefers-reduced-motion) : scroll horizontal manuel
+  &--static {
+    .marquee__track {
+      animation: none;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 0 $space-4;
+
+      > * {
+        scroll-snap-align: start;
+      }
+    }
+  }
+
+  // RTL : inverse la direction par défaut (le marquee va vers la droite en arabe)
+  [dir='rtl'] &__track {
+    animation-direction: reverse;
+  }
+  [dir='rtl'] &--right .marquee__track {
+    animation-direction: normal;
+  }
+}
+
+@keyframes marqueeScroll {
+  from {
+    transform: translateX(0);
+  }
+  // -50% = un seul "group" : à ce moment le 2ème group occupe la position
+  // d'origine du 1er → la boucle est invisible.
+  to {
+    transform: translateX(-50%);
+  }
+}

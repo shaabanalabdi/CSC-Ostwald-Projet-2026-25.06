@@ -1,0 +1,21 @@
+@use 'variables' as *;
+
+// ============================================================
+// AdminLayout — Navbar fixe + main + Footer commun aux pages admin.
+// ============================================================
+
+.admin-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  // Réserve l'espace du Navbar fixe : sans ça, le contenu admin
+  // (header de chaque page) glisse sous la Navbar et est masqué.
+  &__main {
+    flex: 1;
+    padding-top: $navbar-height;
+    // position: relative — utile pour les overlays internes (modals,
+    // tooltips) qui pourraient vouloir s'ancrer au main.
+    position: relative;
+  }
+}

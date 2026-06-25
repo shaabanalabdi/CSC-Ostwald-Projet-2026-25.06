@@ -1,0 +1,85 @@
+# ============================================================
+# docker-compose.yml — Local development stack for CSC Ostwald.
+#
+# Spins up MySQL 8 + phpMyAdmin. The schema (api/database.sql) is
+# mounted into MySQL's init directory, so the first `docker compose up`
+# creates the `csc_ostwald` database AND the 10 tables in one shot —
+# no manual `mysql < database.sql` needed.
+#
+# Usage (from this directory):
+#   docker compose up -d            # start
+#   docker compose down             # stop, KEEP data
+#   docker compose down -v          # stop, DELETE data (fresh start)
+#   docker compose logs -f db       # follow MySQL logs
+#
+# After the containers are up:
+#   - MySQL    → localhost:3306    (csc_ostwald, root / dev)
+#   - phpMyAdmin → http://localhost:8080 (root / dev)
+#
+# Then in api/.env, set DB_USER=root and DB_PASSWORD=dev (see
+# api/.env.example for the full Docker block).
+#
+# NOTE: `version:` was removed in Compose v2 — kept the keyless syntax
+# for compatibility with the newer Docker Desktop releases.
+# ============================================================
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: csc_ostwald_mysql
+    restart: unless-stopped
+    environment:
+      # Root password is fine for local dev. Production uses Aiven
+      # (see docs/DEPLOYMENT.md) — never expose this container publicly.
+      MYSQL_ROOT_PASSWORD: dev
+      MYSQL_DATABASE: csc_ostwald
+      # utf8mb4 across the board so accents and emojis behave the
+      # same as on the prod Aiven instance.
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      # Persisted data — survives `docker compose down`, wiped only
+      # by `docker compose down -v`.
+      - mysql_data:/var/lib/mysql
+      # Auto-init: any *.sql in this directory is executed against the
+      # database created by MYSQL_DATABASE on the FIRST container start
+      # only. Re-runs require dropping the volume.
+      - ./api/database.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    ports:
+      # Bind to loopback only — never expose the dev MySQL on the LAN.
+      # Removing the `127.0.0.1:` prefix would publish 3306 on every
+      # network interface, including the public one if the laptop is on
+      # an open Wi-Fi.
+      - '127.0.0.1:3310:3306'
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-uroot', '-pdev']
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: csc_ostwald_phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      # Sign in as root with the dev password. Restricted users can be
+      # created from the phpMyAdmin UI if needed for a multi-dev setup.
+      PMA_USER: root
+      PMA_PASSWORD: dev
+      UPLOAD_LIMIT: 64M
+    ports:
+      # Loopback-only — phpMyAdmin signs in as root with the dev password,
+      # exposing it on 0.0.0.0 would hand DB superuser access to anyone on
+      # the LAN. Reach it locally at http://localhost:8080.
+      - '127.0.0.1:8083:80'
+
+volumes:
+  mysql_data:
+    name: csc_ostwald_mysql_data

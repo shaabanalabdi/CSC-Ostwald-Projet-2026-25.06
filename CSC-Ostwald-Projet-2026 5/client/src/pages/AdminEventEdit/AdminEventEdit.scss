@@ -1,0 +1,201 @@
+@use 'variables' as *;
+
+.admin-event-edit {
+  min-height: 100vh;
+  background: $gray-50;
+  padding: $space-8 $space-6;
+
+  &__header {
+    max-width: 800px;
+    margin: 0 auto $space-6 auto;
+  }
+
+  &__back {
+    display: inline-block;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-decoration: none;
+    margin-bottom: $space-2;
+
+    &:hover {
+      color: $bleu;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-size: $text-3xl;
+    color: $bleu-dark;
+  }
+
+  &__state {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: $space-6;
+    text-align: center;
+    color: $gray-700;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-1;
+  }
+
+  &__form {
+    max-width: 800px;
+    margin: 0 auto;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-1;
+    padding: $space-6 $space-8;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-4;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    &--full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: $text-sm;
+      font-weight: $font-medium;
+      color: $gray-700;
+
+      span[aria-hidden] {
+        color: $error;
+        margin-left: $space-1;
+      }
+    }
+
+    input[type='text'],
+    input[type='url'],
+    input[type='datetime-local'],
+    textarea {
+      padding: $space-3 $space-4;
+      border: 1px solid $gray-300;
+      border-radius: $radius-md;
+      font-size: $text-base;
+      font-family: inherit;
+      background: $white;
+      color: $bleu-dark;
+      transition: $transition-colors;
+
+      &:focus {
+        outline: none;
+        border-color: $bleu;
+        box-shadow: $ring-bleu;
+      }
+
+      &[aria-invalid='true'] {
+        border-color: $error;
+
+        &:focus {
+          box-shadow: $ring-error;
+        }
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    cursor: pointer;
+    padding: $space-3;
+    background: $gray-50;
+    border-radius: $radius-md;
+    border: 1px solid $gray-200;
+    transition: $transition-colors;
+
+    &:hover {
+      border-color: $bleu;
+    }
+
+    input[type='checkbox'] {
+      width: 18px;
+      height: 18px;
+      accent-color: $green;
+    }
+
+    span {
+      font-size: $text-sm;
+      color: $gray-800;
+    }
+  }
+
+  &__error {
+    font-size: $text-sm;
+    color: $error-dark;
+  }
+
+  &__form-error {
+    grid-column: 1 / -1;
+    padding: $space-3 $space-4;
+    background: $error-bg;
+    color: $error-dark;
+    border: 1px solid $error-light;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    margin: 0;
+  }
+
+  &__form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+    padding-top: $space-4;
+    border-top: 1px solid $gray-200;
+  }
+
+  &__cancel {
+    padding: $space-3 $space-5;
+    background: transparent;
+    color: $gray-700;
+    border: 1px solid $gray-300;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    text-decoration: none;
+    transition: $transition-colors;
+
+    &:hover {
+      background: $gray-100;
+      color: $bleu-dark;
+    }
+  }
+
+  &__submit {
+    padding: $space-3 $space-6;
+    background: $green;
+    color: $white;
+    border: none;
+    border-radius: $radius-md;
+    font-size: $text-base;
+    font-weight: $font-semibold;
+    cursor: pointer;
+    transition: $transition-colors;
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, $green 88%, black);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba($green, 0.3);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}

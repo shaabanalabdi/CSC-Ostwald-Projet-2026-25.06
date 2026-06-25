@@ -1,0 +1,385 @@
+@use 'variables' as *;
+@use 'sass:color';
+
+// ===========================
+// HERO
+// ===========================
+.projets__hero {
+  padding-top: 100px;
+  padding-bottom: 60px;
+  background: $white;
+  max-width: 860px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.projets__hero-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: $bleu-dark;
+  margin-bottom: 24px;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 48px;
+    height: 4px;
+    background: $bleu-dark;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+}
+
+.projets__hero-intro {
+  background: $orange;
+  color: $white;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.8;
+  padding: 20px 28px;
+  border-radius: $radius;
+}
+
+// ===========================
+// TITRES DE SECTION (bubble Instagram CSC)
+// ===========================
+.projets__section-title {
+  display: block;
+  margin: 0 auto $space-6;
+  width: fit-content;
+}
+
+.projets__section-intro {
+  font-size: 0.95rem;
+  color: $bleu-dark;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+// ===========================
+// CATÉGORIES
+// ===========================
+.projets__idee {
+  background: $white;
+  padding: 60px 0;
+}
+
+.projets__categories {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+// Surcharges spécifiques pour les cartes catégories de Projets
+// (la structure de base vient de .csc-card dans global.scss).
+// On ajoute uniquement : la bordure colorée du haut, le fond gris doux,
+// et le centrage du contenu.
+.projets__categorie-card.csc-card {
+  background: $surface-muted;
+  border-top: 3px solid $bleu;
+  text-align: center;
+
+  .csc-card__image-wrapper {
+    aspect-ratio: auto;
+    height: 140px;
+  }
+
+  .csc-card__body {
+    align-items: center;
+    gap: $space-2;
+    padding: $space-5 $space-4;
+  }
+}
+
+.projets__categorie-titre {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $bleu-dark;
+}
+
+.projets__categorie-desc {
+  font-size: 0.88rem;
+  color: $text-muted;
+  line-height: 1.6;
+}
+
+// ===========================
+// ÉTAPES
+// ===========================
+.projets__etapes {
+  background: $surface-muted;
+  padding: 60px 0;
+}
+
+.projets__steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.projets__step {
+  background: $white;
+  // Blob radius (style wireframe mai 2026) — 4 patterns cycliques sur les 4 étapes
+  border-radius: 60px 16px 50px 16px;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 12px $shadow;
+  transition:
+    transform $transition-base $ease-out,
+    box-shadow $transition-base $ease-out;
+
+  &:nth-child(4n + 2) {
+    border-radius: 16px 60px 16px 50px;
+  }
+  &:nth-child(4n + 3) {
+    border-radius: 50px 16px 60px 16px;
+  }
+  &:nth-child(4n + 4) {
+    border-radius: 16px 50px 16px 60px;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+  }
+}
+
+.projets__step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $bleu;
+  color: $white;
+  font-size: 1.1rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.projets__step-titre {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $bleu-dark;
+}
+
+.projets__step-desc {
+  font-size: 0.88rem;
+  color: $text-muted;
+  line-height: 1.7;
+  margin: 0;
+}
+
+// ===========================
+// PREMIERS PAS
+// ===========================
+.projets__premiers-pas {
+  background: $white;
+  padding: 60px 0;
+}
+
+.projets__quote {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $orange-text;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.projets__questions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 760px;
+}
+
+.projets__question {
+  color: $white;
+  font-size: 0.93rem;
+  font-weight: 600;
+  padding: 14px 24px;
+  border-radius: $radius;
+  width: fit-content;
+  max-width: 420px;
+}
+
+.projets__question--green {
+  background: $green;
+}
+.projets__question--navy {
+  background: $bleu;
+}
+.projets__question--orange {
+  background: $orange;
+}
+.projets__question--step-0 {
+  align-self: flex-start;
+}
+.projets__question--step-1 {
+  align-self: center;
+}
+.projets__question--step-2 {
+  align-self: flex-end;
+}
+
+// ===========================
+// À L'ACTION
+// ===========================
+.projets__action {
+  background: $surface-muted;
+  padding: 60px 0;
+}
+
+.projets__infos {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.projets__info-pair {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-width: 200px;
+}
+
+.projets__info-label {
+  background: $green;
+  color: $white;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 18px 16px;
+  border-radius: $radius 0 0 $radius;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.projets__info-value {
+  background: $orange;
+  color: $white;
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 16px 20px;
+  border-radius: 0 $radius $radius 0;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+// ===========================
+// CTA FINAL
+// ===========================
+.projets__cta {
+  background: $bleu-dark;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.projets__cta-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $bleu-dark;
+  margin-top: 48px;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.projets__cta-btn {
+  display: inline-block;
+  background: $orange;
+  color: $white;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 14px 36px;
+  border-radius: $radius;
+  text-decoration: none;
+  transition: $transition;
+
+  &:hover {
+    background: color.adjust($orange, $lightness: -8%);
+  }
+}
+
+// ===========================
+// RESPONSIVE
+// ===========================
+@media (max-width: 1024px) {
+  .projets__categories,
+  .projets__steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  // Section padding mobile : 60px → 40px (espacement plus serré)
+  .projets__idee,
+  .projets__etapes,
+  .projets__premiers-pas,
+  .projets__action {
+    padding: 40px 0;
+  }
+
+  // Hero polish mobile : padding réduit, intro compact
+  .projets__hero {
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+
+  .projets__hero-title {
+    font-size: 1.7rem;
+  }
+
+  .projets__hero-intro {
+    padding: 16px 20px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .projets__infos {
+    flex-direction: column;
+  }
+
+  .projets__question--step-1,
+  .projets__question--step-2 {
+    align-self: flex-start;
+  }
+
+  .projets__question {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  // Hero polish très petit mobile : padding minimal mais respirable
+  .projets__hero {
+    padding-top: 70px;
+    padding-bottom: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .projets__hero-title {
+    font-size: 1.4rem;
+  }
+
+  .projets__hero-intro {
+    font-size: 0.9rem;
+    padding: 14px 18px;
+  }
+
+  .projets__categories,
+  .projets__steps {
+    grid-template-columns: 1fr;
+  }
+}

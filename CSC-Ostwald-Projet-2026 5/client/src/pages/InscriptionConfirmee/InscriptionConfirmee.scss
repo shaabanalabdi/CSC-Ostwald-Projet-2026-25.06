@@ -1,0 +1,112 @@
+@use 'variables' as *;
+@use 'sass:color';
+
+.inscription-confirmee {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-8 $space-6;
+  background: linear-gradient(
+    135deg,
+    color.adjust($green, $lightness: 38%),
+    color.adjust($orange, $lightness: 35%)
+  );
+
+  &__card {
+    width: 100%;
+    max-width: 560px;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-4;
+    padding: $space-10 $space-8;
+    text-align: center;
+  }
+
+  &__check {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto $space-5 auto;
+    border-radius: 50%;
+    background: $green;
+    color: $white;
+    font-size: 2.5rem;
+    line-height: 72px;
+    font-weight: $font-bold;
+    box-shadow: $shadow-green;
+  }
+
+  &__title {
+    margin: 0 0 $space-3 0;
+    font-size: $text-3xl;
+    color: $bleu-dark;
+  }
+
+  &__lead {
+    margin: 0 0 $space-4 0;
+    font-size: $text-lg;
+    color: $gray-800;
+    line-height: $leading-snug;
+  }
+
+  &__detail {
+    margin: 0 0 $space-6 0;
+    font-size: $text-base;
+    color: $gray-700;
+    line-height: $leading-relaxed;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    margin-bottom: $space-6;
+  }
+
+  &__link {
+    display: inline-block;
+    padding: $space-3 $space-6;
+    border-radius: $radius-md;
+    font-size: $text-base;
+    font-weight: $font-semibold;
+    text-decoration: none;
+    transition: $transition-colors;
+
+    &--primary {
+      background: $orange;
+      color: $white;
+      border: 1px solid $orange;
+
+      &:hover {
+        background: $orange-dark;
+        border-color: $orange-dark;
+      }
+    }
+
+    &--ghost {
+      background: transparent;
+      color: $bleu;
+      border: 1px solid $gray-300;
+
+      &:hover {
+        background: $gray-50;
+        border-color: $bleu;
+      }
+    }
+  }
+
+  &__contact {
+    margin: 0;
+    font-size: $text-sm;
+    color: $gray-600;
+
+    a {
+      color: $bleu;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}

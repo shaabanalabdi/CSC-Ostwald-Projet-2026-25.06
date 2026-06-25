@@ -1,0 +1,201 @@
+@use 'variables' as *;
+
+.inscription-jeunesse {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: $space-12 $space-6;
+  background: $gray-50;
+
+  &__card {
+    width: 100%;
+    max-width: 600px;
+    background: $white;
+    border-radius: $radius-lg2;
+    box-shadow: $elevation-2;
+    padding: $space-8;
+  }
+
+  &__back {
+    display: inline-block;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-decoration: none;
+    margin-bottom: $space-4;
+
+    &:hover {
+      color: $bleu;
+    }
+  }
+
+  &__title {
+    margin: 0 0 $space-4 0;
+    font-size: $text-3xl;
+    color: $bleu-dark;
+  }
+
+  &__summary {
+    background: rgba($orange, 0.06);
+    border-left: 3px solid $orange;
+    padding: $space-4 $space-5;
+    border-radius: $radius-md;
+    margin-bottom: $space-6;
+
+    p {
+      margin: 0 0 $space-2 0;
+      font-size: $text-base;
+      color: $bleu-dark;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      span {
+        display: inline-block;
+        min-width: 100px;
+        font-size: $text-xs;
+        font-weight: $font-semibold;
+        text-transform: uppercase;
+        letter-spacing: $tracking-wide;
+        color: $gray-600;
+        margin-right: $space-2;
+      }
+    }
+  }
+
+  &__price {
+    font-weight: $font-bold;
+    color: $orange-text;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-4;
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    label {
+      font-size: $text-sm;
+      font-weight: $font-medium;
+      color: $gray-700;
+
+      span[aria-hidden] {
+        color: $error;
+        margin-left: $space-1;
+      }
+    }
+
+    input {
+      padding: $space-3 $space-4;
+      border: 1px solid $gray-300;
+      border-radius: $radius-md;
+      font-size: $text-base;
+      background: $white;
+      color: $bleu-dark;
+      transition: $transition-colors;
+
+      &:focus {
+        outline: none;
+        border-color: $bleu;
+        box-shadow: $ring-bleu;
+      }
+
+      &[aria-invalid='true'] {
+        border-color: $error;
+
+        &:focus {
+          box-shadow: $ring-error;
+        }
+      }
+    }
+  }
+
+  &__rgpd {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-3;
+    font-size: $text-sm;
+    color: $gray-800;
+    line-height: $leading-relaxed;
+    cursor: pointer;
+
+    input[type='checkbox'] {
+      margin-top: 4px;
+      width: 18px;
+      height: 18px;
+      accent-color: $orange;
+      flex-shrink: 0;
+    }
+
+    a {
+      color: $bleu;
+      text-decoration: underline;
+    }
+  }
+
+  &__error {
+    font-size: $text-sm;
+    color: $error-dark;
+  }
+
+  &__form-error {
+    padding: $space-3 $space-4;
+    background: $error-bg;
+    color: $error-dark;
+    border: 1px solid $error-light;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    margin: 0;
+  }
+
+  &__submit {
+    padding: $space-4 $space-6;
+    background: $orange;
+    color: $white;
+    border: none;
+    border-radius: $radius-md;
+    font-size: $text-base;
+    font-weight: $font-semibold;
+    cursor: pointer;
+    transition: $transition-colors;
+    margin-top: $space-2;
+
+    &:hover:not(:disabled) {
+      background: $orange-dark;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: $ring-orange;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__note {
+    margin: $space-2 0 0 0;
+    font-size: $text-xs;
+    color: $gray-500;
+    text-align: center;
+    line-height: $leading-relaxed;
+  }
+}

@@ -1,0 +1,23 @@
+@use 'variables' as *;
+
+// Barre de progression de scroll — fixée en haut, au-dessus de la navbar
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  inset-inline-start: 0;
+  right: 0; // largeur viewport entier
+  height: 3px;
+  z-index: calc(#{$z-modal} + 1); // au-dessus de la navbar fixe
+  // Dégradé brand (orange → green) — signature CSC
+  background: linear-gradient(90deg, $orange 0%, $orange 40%, $green 100%);
+  transform-origin: 0% 50%; // commence à gauche
+  // L'animation : transform: scaleX(0 → 1) piloté par framer-motion via style inline
+
+  // RTL : commence à droite (les pays arabes lisent de droite à gauche)
+  [dir='rtl'] & {
+    transform-origin: 100% 50%;
+  }
+
+  // Pointer-events: none → ne bloque pas les clics sur la navbar dessous
+  pointer-events: none;
+}

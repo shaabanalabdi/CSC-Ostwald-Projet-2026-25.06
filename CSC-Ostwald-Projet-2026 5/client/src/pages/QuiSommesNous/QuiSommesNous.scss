@@ -1,0 +1,504 @@
+@use 'variables' as *;
+
+// بانيير مقلّص خاص بصفحة Qui sommes-nous
+.qsn__page-header {
+  padding: $space-4 $space-5 $space-5 !important;
+
+  h1 {
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem) !important;
+    padding: 8px 20px !important;
+  }
+}
+
+// ===========================
+// QUI SOMMES-NOUS
+// ===========================
+.qsn {
+  &__reseau {
+    margin: $space-5 0;
+  }
+
+  &__reseau-desc {
+    white-space: nowrap;
+  }
+
+  &__reseau-wrapper {
+    width: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: $radius-lg;
+    margin: $space-6 auto 0;
+    max-width: 700px;
+
+    @media (max-width: 768px) {
+      border: 1px solid $gray-200;
+      cursor: grab;
+      &:active {
+        cursor: grabbing;
+      }
+    }
+  }
+
+  &__reseau-map {
+    position: relative;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      min-width: 600px;
+    }
+
+    @media (max-width: 480px) {
+      min-width: 550px;
+    }
+  }
+
+  &__reseau-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: $radius-lg;
+    box-shadow: $elevation-2;
+  }
+
+  &__reseau-link {
+    position: absolute;
+    background: rgba($bleu, 0.85);
+    color: $white;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: $radius-sm;
+    text-decoration: none;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    border: 1px solid rgba($white, 0.3);
+
+    &:hover {
+      background: $orange-dark;
+      color: $white;
+    }
+
+    &--static {
+      position: static;
+      transform: none;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.6rem;
+      padding: 3px 6px;
+    }
+  }
+
+  &__reseau-euro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $space-2;
+    margin-top: $space-3;
+  }
+
+  // Titres de sections en bubble (Instagram CSC) — centrés, marge basse
+  &__section-title {
+    display: block;
+    margin: $space-5 auto $space-4;
+    width: fit-content;
+  }
+
+  &__building {
+    width: 100%;
+    max-height: 600px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  &__intro {
+    padding: 32px 0 8px;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: $bleu-dark;
+
+    p {
+      max-width: 100%;
+    }
+
+    p + p {
+      margin-top: 14px;
+    }
+
+    &-titre {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: $bleu;
+      margin-bottom: 16px;
+      position: relative;
+
+      &::after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 3px;
+        background: $bleu;
+        margin-top: 6px;
+        border-radius: 2px;
+      }
+    }
+
+    &-highlight {
+      margin-top: 14px;
+    }
+  }
+
+  &__sub-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $bleu;
+    margin-bottom: 16px;
+
+    // Variante avec espacement supérieur (remplace l'ancien style inline)
+    &--spaced {
+      margin-top: 40px;
+    }
+  }
+
+  // --- Objectifs ---
+  &__objectives {
+    padding: 36px 0;
+
+    &-list {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    &-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: $bleu-dark;
+    }
+
+    &-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: $green-text;
+
+      svg {
+        display: block;
+      }
+    }
+  }
+
+  // --- Équipe ---
+  &__team {
+    padding: 36px 0;
+
+    &-intro {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: $bleu-dark;
+      margin-bottom: 36px;
+    }
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+    }
+
+    &-member {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+
+    &-avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: $surface-muted;
+      border: 3px dashed $bleu;
+      box-shadow: 0 4px 14px rgba($bleu, 0.15);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    &-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+
+    // Initiales fallback (quand photo_url est NULL côté API)
+    &-initials {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 800;
+      color: $bleu;
+      letter-spacing: 0.05em;
+    }
+
+    // États : chargement / erreur récupération API
+    &-state {
+      text-align: center;
+      padding: 24px;
+      color: $bleu-dark;
+      background: $gray-50;
+      border-radius: 12px;
+
+      &--error {
+        color: $error-dark;
+        background: rgba(239, 68, 68, 0.06);
+      }
+    }
+
+    &-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: $bleu-dark;
+    }
+
+    &-role {
+      font-size: 0.82rem;
+      color: $gray-500;
+      line-height: 1.4;
+    }
+
+    &-coords {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+      width: 100%;
+    }
+
+    &-email {
+      font-size: 0.75rem;
+      color: $bleu;
+      text-decoration: none;
+      word-break: break-all;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $orange-text;
+        text-decoration: underline;
+      }
+    }
+
+    &-phone {
+      font-size: 0.78rem;
+      color: $bleu-dark;
+      text-decoration: none;
+      font-weight: 600;
+
+      &:hover {
+        color: $orange-text;
+      }
+    }
+  }
+
+  // --- Conseil d'Administration ---
+  &__conseil {
+    padding: 36px 0;
+
+    &-desc {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: $bleu-dark;
+      margin-bottom: 28px;
+    }
+
+    &-email {
+      color: $orange-text;
+      font-weight: 600;
+      text-decoration: underline;
+      word-break: break-all;
+
+      &:hover {
+        color: $orange-dark;
+      }
+    }
+
+    &-cta {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: $orange-text;
+      padding: 16px 20px;
+      background: rgba($orange, 0.08);
+      border-left: 4px solid $orange;
+      border-radius: $radius;
+    }
+  }
+
+  &__conseil-table {
+    width: 100%;
+    // table-layout: fixed → les colonnes se distribuent uniformément sur 100%
+    // (au lieu de se rétrécir au contenu, ce qui laissait du blanc à droite)
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+    // ⚠️ Pas de `display: block` ici — cela casse le layout table et empêche
+    // les colonnes de remplir 100%. Le scroll mobile est géré par le wrapper.
+
+    th {
+      background: $bleu;
+      color: $white;
+      padding: 10px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 10px 16px;
+      color: $bleu-dark;
+      border-bottom: 1px solid $gray-200;
+      // Texte qui peut wrap si nécessaire (sinon overflow horizontal sur mobile)
+      word-wrap: break-word;
+    }
+
+    tr:nth-child(even) td {
+      background: $surface-muted;
+    }
+
+    tr:hover td {
+      background: rgba($bleu, 0.05);
+    }
+
+    // 1ère colonne (numéro) — étroite
+    th:first-child,
+    td:first-child {
+      width: 48px;
+      font-weight: 700;
+      color: $bleu;
+      text-align: center;
+    }
+
+    // Dernière colonne (Prénom) — un peu plus étroite que Fonction/Nom
+    th:last-child,
+    td:last-child {
+      width: 22%;
+    }
+  }
+
+  // Wrapper pour scroll horizontal sur très petits écrans uniquement
+  &__conseil-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 28px;
+  }
+
+  // --- Message ---
+  &__message {
+    padding: 40px 0 60px;
+
+    &-slogan {
+      font-size: 1.05rem;
+      margin: 16px 0 10px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: $bleu-dark;
+    }
+  }
+}
+
+// ===========================
+// RESPONSIVE — MOBILE (≤ 768px)
+// ===========================
+@media (max-width: 768px) {
+  .qsn {
+    &__building {
+      max-height: 220px;
+    }
+
+    &__objectives-item {
+      font-size: 0.9rem;
+    }
+
+    &__team-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    &__message {
+      padding: 32px 0 48px;
+    }
+  }
+}
+
+// ===========================
+// RESPONSIVE — PETIT MOBILE (≤ 480px)
+// ===========================
+@media (max-width: 480px) {
+  .qsn {
+    &__building {
+      max-height: 180px;
+    }
+
+    &__intro {
+      font-size: 0.9rem;
+      padding: 24px 0 8px;
+    }
+
+    &__objectives {
+      padding: 24px 0;
+
+      &-item {
+        font-size: 0.88rem;
+        gap: 10px;
+      }
+
+      &-icon {
+        font-size: 1.3rem;
+      }
+    }
+
+    &__team {
+      padding: 24px 0;
+
+      &-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      &-intro {
+        font-size: 0.9rem;
+      }
+
+      &-avatar {
+        width: 68px;
+        height: 68px;
+        font-size: 1.1rem;
+      }
+    }
+
+    &__conseil-table {
+      font-size: 0.78rem;
+
+      th,
+      td {
+        padding: 7px 10px;
+      }
+    }
+  }
+}

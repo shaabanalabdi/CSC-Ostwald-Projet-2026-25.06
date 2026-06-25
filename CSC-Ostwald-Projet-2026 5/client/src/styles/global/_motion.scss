@@ -1,0 +1,168 @@
+// ============================================================
+// _motion.scss — Système d'animations CSS pures
+//   - keyframes (fadeIn, slideIn*, scaleIn, shimmer, pulseRing)
+//   - utility classes (.animate-*, .delay-N, .hover-*, .skeleton, .pulse-ring)
+//   - override prefers-reduced-motion (WCAG 2.3.3)
+// ============================================================
+
+@use '../variables' as *;
+
+// ===========================
+// MOTION SYSTEM — Phase E (UI/UX Pro Max)
+// Animations d'entrée, hover lifts, stagger delays.
+// Toutes respectent `prefers-reduced-motion` via la règle globale plus bas.
+// ===========================
+
+// ─── Animation keyframes ─────────────────────────────────────────
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInStart {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulseRing {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba($orange, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba($orange, 0);
+  }
+}
+
+// ─── Utility classes : reveal animations (désactivées) ──────────
+.animate-fade-in,
+.animate-slide-up,
+.animate-slide-down,
+.animate-slide-start,
+.animate-scale-in {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+.delay-1,
+.delay-2,
+.delay-3,
+.delay-4,
+.delay-5,
+.delay-6,
+.delay-7,
+.delay-8 {
+  animation-delay: 0ms;
+}
+
+// ─── Hover utility lifts (désactivées) ───────────────────────────
+.hover-lift {
+  transition: none;
+  &:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.hover-grow {
+  transition: none;
+  &:hover {
+    transform: none;
+  }
+}
+
+.hover-shine {
+  &::before {
+    display: none;
+  }
+}
+
+// ─── Skeleton loader ─────────────────────────────────────────────
+.skeleton {
+  background: linear-gradient(90deg, $gray-200 0%, $gray-100 50%, $gray-200 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: $radius-md;
+}
+
+// ─── Pulse ring (utile pour indicateurs "live" ou notifications) ─
+.pulse-ring {
+  animation: pulseRing 2s infinite;
+}
+
+// ===========================
+// PREFERS-REDUCED-MOTION (WCAG 2.3.3 — CRITIQUE)
+// Désactive ou réduit drastiquement les animations pour les utilisateurs
+// qui ont activé "Réduire les animations" dans leur OS.
+// Surcharge globale qui couvre TOUS les composants du projet.
+// ===========================
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  // Désactive les transformations décoratives au hover qui pourraient désorienter
+  .hover-lift:hover,
+  .hover-grow:hover,
+  .card--interactive:hover {
+    transform: none !important;
+  }
+}

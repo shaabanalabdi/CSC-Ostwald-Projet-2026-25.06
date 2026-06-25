@@ -1,0 +1,81 @@
+@use 'variables' as *;
+
+// ===========================
+// WRAPPER PRINCIPAL
+// ===========================
+.apropos {
+  padding-top: $navbar-height; // compense la navbar fixe (84px)
+
+  // ⚠️ Évite la double compensation : si la sous-page utilise <div class="page-header">,
+  // celui-ci a déjà `margin-top: $navbar-height` dans global.scss → on l'annule ici
+  // pour qu'il ne s'ajoute pas au padding-top de .apropos (sinon gap de 84px visible).
+  .page-header {
+    margin-top: 0;
+  }
+}
+
+// ===========================
+// TABS NAVIGATION
+// ===========================
+.apropos__tabs {
+  display: flex;
+  border-bottom: 2px solid $gray-mid;
+  background: $white;
+  position: sticky;
+  top: $navbar-height; // s'ancre juste sous la navbar
+  z-index: 50;
+  overflow-x: auto;
+
+  // masque la scrollbar horizontale sur mobile
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.apropos__tab {
+  flex-shrink: 0;
+  padding: 16px 32px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: $bleu-dark;
+  border-bottom: 3px solid transparent;
+  transition: $transition;
+  white-space: nowrap;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+  font-family: inherit;
+
+  &:hover {
+    color: $orange-text;
+    background: rgba($orange, 0.05);
+  }
+
+  &--active {
+    color: $orange-text;
+    border-bottom-color: $orange-text;
+  }
+}
+
+// ===========================
+// RESPONSIVE — MOBILE (≤ 768px)
+// ===========================
+@media (max-width: 768px) {
+  .apropos__tab {
+    padding: 13px 20px;
+    font-size: 0.88rem;
+  }
+}
+
+// ===========================
+// RESPONSIVE — PETIT MOBILE (≤ 480px)
+// ===========================
+@media (max-width: 480px) {
+  .apropos__tab {
+    padding: 12px 16px;
+    font-size: 0.82rem;
+  }
+}

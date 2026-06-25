@@ -1,0 +1,265 @@
+@use 'variables' as *;
+
+// ===========================
+// HERO
+// ===========================
+.ps__hero {
+  padding: 100px 20px 60px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.ps__hero-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: $bleu-dark;
+  margin-bottom: 24px;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 48px;
+    height: 4px;
+    background: $bleu-dark;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+}
+
+.ps__hero-intro {
+  background: $orange;
+  color: $white;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.7;
+  padding: 20px 28px;
+  border-radius: $radius;
+}
+
+// ===========================
+// DOCUMENTS
+// ===========================
+
+.ps__docs--alt {
+  background: $surface-muted;
+}
+
+// Titre de section en bubble (Instagram CSC) — centré
+.ps__docs-title {
+  display: block;
+  margin: 0 auto $space-6;
+  width: fit-content;
+}
+
+.ps__docs-intro {
+  font-size: 0.95rem;
+  color: $bleu-dark;
+  line-height: 1.8;
+  margin-bottom: 36px;
+  max-width: 600px;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.ps__docs-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 24px;
+
+  // 2 premières cartes : chacune sur 3 colonnes (= 2 par ligne)
+  .ps__doc-card:nth-child(1),
+  .ps__doc-card:nth-child(2) {
+    grid-column: span 3;
+  }
+
+  // 3 dernières cartes : chacune sur 2 colonnes (= 3 par ligne)
+  .ps__doc-card:nth-child(n + 3) {
+    grid-column: span 2;
+  }
+
+  // 3 cartes sur une seule ligne
+  &--three {
+    grid-template-columns: repeat(3, 1fr);
+
+    .ps__doc-card {
+      grid-column: span 1 !important;
+    }
+  }
+}
+
+.ps__doc-card {
+  position: relative; // pour ancrer .ps__doc-badge en absolute
+  background: $white;
+  // Blob radius (style wireframe mai 2026) — 4 patterns cycliques sur les 5 cartes.
+  // border-top remplacé par box-shadow inset pour rester visible aux coins arrondis.
+  border-radius: 60px 16px 50px 16px;
+  padding: 28px 24px;
+  box-shadow: 0 2px 12px $shadow;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: none;
+
+  &--blue {
+    box-shadow:
+      0 2px 12px $shadow,
+      inset 0 4px 0 $bleu;
+    .ps__doc-icon {
+      color: $bleu;
+    }
+  }
+
+  &--orange {
+    box-shadow:
+      0 2px 12px $shadow,
+      inset 0 4px 0 $orange-text;
+    .ps__doc-icon {
+      color: $orange-text;
+    }
+  }
+
+  &--green {
+    box-shadow:
+      0 2px 12px $shadow,
+      inset 0 4px 0 $green-text;
+    .ps__doc-icon {
+      color: $green-text;
+    }
+  }
+}
+
+.ps__doc-icon {
+  display: flex;
+  align-items: center;
+}
+
+.ps__doc-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: $bleu-dark;
+}
+
+.ps__doc-desc {
+  font-size: 0.9rem;
+  color: $text-muted;
+  line-height: 1.7;
+  flex: 1;
+}
+
+.ps__doc-btn {
+  align-self: flex-start;
+  margin-top: auto;
+  font-size: 0.75rem !important;
+  padding: 6px 14px !important;
+  border-radius: 10px !important;
+  min-height: unset !important;
+  letter-spacing: 0.5px !important;
+}
+
+// Bubble overlay catégorie (top-right, style Instagram CSC)
+// Position en haut-droite pour ne pas chevaucher l'icône à gauche
+.ps__doc-badge {
+  position: absolute;
+  top: -$space-2;
+  inset-inline-end: $space-3;
+  z-index: 2;
+}
+
+// ===========================
+// RESPONSIVE — TABLETTE (≤ 1024px)
+// ===========================
+@media (max-width: 1024px) {
+  .ps__docs-grid {
+    grid-template-columns: repeat(2, 1fr);
+
+    .ps__doc-card:nth-child(1),
+    .ps__doc-card:nth-child(2),
+    .ps__doc-card:nth-child(n + 3) {
+      grid-column: span 1;
+    }
+  }
+}
+
+// ===========================
+// RESPONSIVE — TABLETTE (≤ 768px)
+// ===========================
+@media (max-width: 768px) {
+  .ps__hero {
+    padding: 80px 20px 40px;
+  }
+
+  .ps__hero-title {
+    font-size: 1.7rem;
+  }
+
+  .ps__docs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .ps__doc-card {
+    padding: 20px 18px;
+  }
+
+  .ps__docs-intro {
+    max-width: 100%;
+  }
+}
+
+// ===========================
+// RESPONSIVE — MOBILE (≤ 480px)
+// ===========================
+@media (max-width: 480px) {
+  .ps__hero {
+    padding: 70px 16px 32px;
+  }
+
+  .ps__hero-title {
+    font-size: 1.4rem;
+    gap: 12px;
+
+    &::before {
+      width: 32px;
+    }
+  }
+
+  .ps__hero-intro {
+    font-size: 0.9rem;
+    padding: 16px 18px;
+  }
+
+  .ps__docs-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .ps__doc-card {
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .ps__doc-title {
+    font-size: 0.95rem;
+  }
+
+  .ps__doc-desc {
+    font-size: 0.82rem;
+  }
+
+  .ps__doc-btn {
+    align-self: flex-end;
+    margin-top: auto;
+    font-size: 0.72rem;
+    padding: 6px 12px;
+  }
+
+  .ps__docs-intro {
+    font-size: 0.9rem;
+  }
+}

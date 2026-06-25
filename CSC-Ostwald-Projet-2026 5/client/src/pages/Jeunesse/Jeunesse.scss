@@ -1,0 +1,714 @@
+@use 'variables' as *;
+@use 'sass:color';
+
+// ===========================
+// HERO
+// ===========================
+.jeunesse__hero {
+  padding-top: 100px;
+  padding-bottom: 60px;
+  background: $white;
+  max-width: 860px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+// Titre hero (bubble pink XL) — centré sur la page
+.jeunesse__hero-title {
+  display: block !important;
+  margin: 0 auto 24px;
+  width: fit-content;
+}
+
+.jeunesse__hero-subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: $bleu-dark;
+  line-height: 1.7;
+  margin-top: 16px;
+  font-style: italic;
+}
+
+.jeunesse__hero-intro {
+  // $orange-text (#9c5f00) — 5.0:1 avec texte blanc, passe WCAG AA
+  // Normal. Voir Famille.scss pour le détail du choix de la teinte.
+  background: $orange-text;
+  color: $white;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.8;
+  padding: 20px 28px;
+  border-radius: $radius;
+  // Centrage horizontal : override l'inline-flex de .text-reveal pour avoir
+  // un bloc auto-centré (width: fit-content). justify-content: center
+  // garde les mots centrés quand ils wrappent sur plusieurs lignes.
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+
+  strong {
+    font-weight: 800;
+  }
+}
+
+// ===========================
+// STATS
+// ===========================
+.jeunesse__stats {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-top: 32px;
+}
+
+.jeunesse__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.jeunesse__stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: $bleu;
+}
+
+.jeunesse__stat-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $bleu-dark;
+}
+
+// ===========================
+// ACTIVITÉS
+// ===========================
+.jeunesse__activites {
+  background: $surface-muted;
+  padding: 60px 0 0;
+}
+
+.jeunesse__contact {
+  margin-top: 40px;
+  background: rgba($orange, 0.08);
+  border-left: 4px solid $orange;
+  padding: 20px 24px;
+  border-radius: $radius;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.jeunesse__renseignement {
+  font-size: 1rem;
+  font-weight: 600;
+  color: $bleu-dark;
+  margin: 0;
+}
+
+.jeunesse__contact-coords {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: $bleu-dark;
+}
+
+// Titre section activités (bubble pink) — centré
+.jeunesse__activites-title {
+  display: block !important;
+  margin: 0 auto $space-3;
+  width: fit-content;
+}
+
+.jeunesse__activites-desc {
+  font-size: 0.93rem;
+  color: $bleu-dark;
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+// ===========================
+// GRILLE CARTES
+// ===========================
+.jeunesse__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.jeunesse__card {
+  background: $white;
+  // Blob radius (style wireframe mai 2026) — 4 patterns cycliques.
+  // border-top:3px remplacé par box-shadow inset pour préserver l'accent
+  // pink Jeunesse même aux coins arrondis.
+  border-radius: 60px 16px 50px 16px;
+  overflow: hidden;
+  box-shadow:
+    $elevation-2,
+    inset 0 4px 0 $sector-jeunesse;
+  display: flex;
+  flex-direction: column;
+
+  &:nth-child(4n + 2) {
+    border-radius: 16px 60px 16px 50px;
+  }
+  &:nth-child(4n + 3) {
+    border-radius: 50px 16px 60px 16px;
+  }
+  &:nth-child(4n + 4) {
+    border-radius: 16px 50px 16px 60px;
+  }
+}
+
+.jeunesse__card-img {
+  position: relative;
+  height: 200px;
+  background: $bleu;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.5));
+    opacity: 0;
+    transition: opacity $transition-base $ease-out;
+  }
+}
+
+// Bubble fréquence (HEBDO/MENSUEL) — overlay top-end
+.jeunesse__card-badge {
+  position: absolute !important;
+  top: $space-3;
+  inset-inline-end: $space-3;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: $white !important;
+  color: $green-text !important;
+  border: 1px solid $green-text;
+}
+
+.jeunesse__card-body {
+  padding: 20px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.jeunesse__card-categorie {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: $bleu;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+// Titre carte (bubble pink) — centré dans le body
+.jeunesse__card-titre {
+  display: block !important;
+  margin: 0 auto 10px;
+  width: fit-content;
+}
+
+.jeunesse__card-desc {
+  font-size: 0.88rem;
+  color: $text-muted;
+  line-height: 1.7;
+  flex: 1;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.jeunesse__card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.jeunesse__card-tag {
+  background: $gray-100;
+  color: $bleu-dark;
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: $radius-xl;
+}
+
+// Conteneur des actions (S'inscrire + Nous contacter) — empilées à droite
+.jeunesse__card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  margin-inline-start: auto;
+}
+
+// CTA principal : pill orange, paiement / inscription en ligne
+.jeunesse__card-cta-primary {
+  display: inline-block;
+  background: $orange;
+  color: $white;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: $radius-pill;
+  text-decoration: none;
+  box-shadow: 0 3px 8px rgba($orange, 0.25);
+  transition: $transition;
+
+  &:hover {
+    background: $orange-dark;
+    box-shadow: 0 5px 12px rgba($orange, 0.35);
+    color: $white;
+  }
+}
+
+.jeunesse__card-cta {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: $orange-text;
+  text-decoration: none;
+  transition: $transition;
+
+  &:hover {
+    color: $orange-dark;
+  }
+}
+
+// ===========================
+// TITRES DE SECTION (orange + tiret orange)
+// ===========================
+.jeunesse__section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $bleu;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 3px;
+    background: $orange;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+}
+
+// ===========================
+// C'EST QUOI UNE IDÉE PROJET ?
+// ===========================
+.jeunesse__idee {
+  padding: 60px 0;
+  background: $white;
+}
+
+.jeunesse__idee-intro {
+  font-size: 0.95rem;
+  color: $bleu-dark;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+// 3 colonnes : [cercles] | [textes] | [cercles]
+.jeunesse__idee-layout {
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  gap: 32px;
+  align-items: center;
+}
+
+.jeunesse__idee-col-imgs {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.jeunesse__idee-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: $gray-mid;
+  flex-shrink: 0;
+}
+
+.jeunesse__idee-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  li {
+    font-size: 0.95rem;
+    color: $bleu-dark;
+    line-height: 1.6;
+    text-align: center;
+
+    strong {
+      font-weight: 700;
+    }
+  }
+}
+
+// ===========================
+// COMMENT ÇA SE PASSE ?
+// ===========================
+.jeunesse__etapes {
+  background: $surface-muted;
+  padding: 60px 0;
+}
+
+.jeunesse__etapes-intro {
+  font-size: 0.95rem;
+  color: $bleu-dark;
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+
+.jeunesse__etapes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 760px;
+}
+
+.jeunesse__etape {
+  font-size: 0.93rem;
+  color: $bleu-dark;
+  line-height: 1.8;
+  padding-left: 20px;
+  position: relative;
+
+  &::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: $bleu-dark;
+    font-weight: 900;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+}
+
+// ===========================
+// TES PREMIERS PAS
+// ===========================
+.jeunesse__premiers-pas {
+  background: $white;
+  padding: 60px 0;
+}
+
+.jeunesse__quote {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $orange-text;
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.jeunesse__premiers-intro {
+  font-size: 0.95rem;
+  color: $bleu-dark;
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+
+// 3 cartes en escalier
+.jeunesse__questions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 760px;
+}
+
+.jeunesse__question {
+  color: $white;
+  font-size: 0.93rem;
+  font-weight: 600;
+  padding: 14px 24px;
+  border-radius: $radius;
+  width: fit-content;
+  max-width: 420px;
+}
+
+.jeunesse__question--green {
+  background: $green;
+}
+.jeunesse__question--navy {
+  background: $bleu;
+}
+.jeunesse__question--orange {
+  background: $orange;
+}
+
+// Escalier : gauche → centre → droite
+.jeunesse__question--step-0 {
+  align-self: flex-start;
+}
+.jeunesse__question--step-1 {
+  align-self: center;
+}
+.jeunesse__question--step-2 {
+  align-self: flex-end;
+}
+
+// ===========================
+// PRÊT(E) À PASSER À L'ACTION ?
+// ===========================
+.jeunesse__action {
+  background: $surface-muted;
+  padding: 60px 0;
+}
+
+.jeunesse__action-intro {
+  font-size: 0.95rem;
+  color: $bleu-dark;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+// 3 paires [label vert] + [valeur orange] côte à côte
+.jeunesse__infos {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.jeunesse__info-pair {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  flex: 1;
+  min-width: 200px;
+}
+
+.jeunesse__info-label {
+  background: $green;
+  color: $white;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 18px 16px;
+  border-radius: $radius 0 0 $radius;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.jeunesse__info-value {
+  background: $orange;
+  color: $white;
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 16px 20px;
+  border-radius: 0 $radius $radius 0;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+// ===========================
+// CTA FINAL
+// ===========================
+.jeunesse__cta-final {
+  background: $white;
+  padding: 48px 20px;
+  text-align: center;
+
+  p {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: $bleu-dark;
+  }
+}
+
+// ===========================
+// ON T'AIDE À TE LANCER
+// ===========================
+.jeunesse__lancer {
+  background: $white;
+  padding: 0 0 60px;
+  text-align: center;
+}
+
+.jeunesse__lancer-titre {
+  font-size: 2rem;
+  font-weight: 800;
+  color: $bleu-dark;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 4px;
+    background: $bleu;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+}
+
+.jeunesse__lancer-intro {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: $bleu-dark;
+  margin: 0 auto 40px;
+}
+
+.jeunesse__lancer-cta-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: $orange-text;
+  margin: 32px 0 20px;
+  font-style: italic;
+}
+
+.jeunesse__lancer-btn {
+  display: inline-block;
+  background: $bleu;
+  color: $white;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 14px 36px;
+  border-radius: $radius;
+  text-decoration: none;
+  transition: $transition;
+
+  &:hover {
+    background: color.adjust($bleu, $lightness: -8%);
+  }
+}
+
+// ===========================
+// RESPONSIVE — TABLETTE
+// ===========================
+@media (max-width: 768px) {
+  // Section padding mobile : 60px → 40px (espacement plus serré)
+  .jeunesse__idee,
+  .jeunesse__etapes,
+  .jeunesse__premiers-pas,
+  .jeunesse__action {
+    padding: 40px 0;
+  }
+
+  .jeunesse__activites {
+    padding-top: 40px;
+  }
+
+  // Hero polish mobile : padding réduit, intro compact
+  .jeunesse__hero {
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+
+  .jeunesse__hero-title {
+    font-size: 1.7rem;
+  }
+
+  .jeunesse__hero-intro {
+    padding: 16px 20px;
+    font-size: 0.95rem;
+  }
+
+  .jeunesse__hero-subtitle {
+    font-size: 0.95rem;
+    margin-top: 12px;
+  }
+
+  .jeunesse__stats {
+    gap: 40px;
+  }
+
+  .jeunesse__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jeunesse__idee-layout {
+    grid-template-columns: 80px 1fr 80px;
+    gap: 16px;
+  }
+
+  .jeunesse__idee-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .jeunesse__infos {
+    flex-direction: column;
+  }
+
+  .jeunesse__question--step-1,
+  .jeunesse__question--step-2 {
+    align-self: flex-start;
+  }
+
+  .jeunesse__question {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  // Hero polish très petit mobile : padding minimal mais respirable
+  .jeunesse__hero {
+    padding-top: 70px;
+    padding-bottom: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .jeunesse__hero-title {
+    font-size: 1.4rem;
+
+    &::before {
+      width: 32px;
+    }
+  }
+
+  .jeunesse__hero-intro {
+    font-size: 0.9rem;
+    padding: 14px 18px;
+    line-height: 1.7;
+  }
+
+  .jeunesse__hero-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .jeunesse__stats {
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .jeunesse__idee-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .jeunesse__idee-col-imgs {
+    flex-direction: row;
+    justify-content: center;
+  }
+}

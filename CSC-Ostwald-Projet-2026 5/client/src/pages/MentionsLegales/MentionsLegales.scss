@@ -1,0 +1,12 @@
+@use 'variables' as *;
+
+.mentions__section {
+  margin-bottom: $space-6;
+}
+
+// Titre de section en bubble (Instagram CSC) — centré + marge basse
+.mentions__section-title {
+  display: block;
+  margin: 0 auto $space-6;
+  width: fit-content;
+}

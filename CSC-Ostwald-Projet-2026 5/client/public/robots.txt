@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Page formulaire bénévole — ne pas indexer
+Disallow: /inscription-benevole
+
+Sitemap: https://csc-ostwald.fr/sitemap.xml

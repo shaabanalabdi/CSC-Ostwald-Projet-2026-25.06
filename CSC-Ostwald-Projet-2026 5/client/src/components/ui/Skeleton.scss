@@ -1,0 +1,45 @@
+@use 'variables' as *;
+
+// ───────────────────────────────────────────────────────────
+// Skeleton — neutral grey block with a left-to-right shimmer
+// used while async data loads. Reserves layout space to stop
+// CLS the moment the real content arrives.
+// ───────────────────────────────────────────────────────────
+
+.skeleton {
+  display: block;
+  background-color: $gray-200;
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  background-position: -100% 0;
+  border-radius: 8px;
+  animation: skeleton-shimmer 1.4s infinite;
+}
+
+.skeleton--text {
+  height: 1em;
+  border-radius: $radius-xs;
+}
+
+.skeleton--circle {
+  border-radius: 50%;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    background-position: 100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background-image: none;
+  }
+}

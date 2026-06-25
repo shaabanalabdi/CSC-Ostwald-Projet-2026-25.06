@@ -68,6 +68,18 @@ const conn = await mysql.createConnection({
 });
 
 try {
+  // Aiven (et MySQL avec sql_require_primary_key=ON) refusent un CREATE TABLE
+  // sans clé primaire en ligne. Or ce dump phpMyAdmin crée les tables SANS PK
+  // puis les ajoute via ALTER TABLE en fin de fichier. On désactive la
+  // contrainte le temps de la session de migration (no-op sur un MySQL local
+  // où elle n'est pas activée).
+  try {
+    await conn.query('SET SESSION sql_require_primary_key = 0');
+  } catch {
+    // Certains hôtes interdisent SET SESSION sur cette variable — on continue,
+    // les CREATE TABLE échoueront alors clairement si la contrainte est active.
+  }
+
   let applied = 0;
   for (const [i, statement] of statements.entries()) {
     try {
